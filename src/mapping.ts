@@ -5,28 +5,37 @@ import {
   OwnershipTransferred,
   SetFeeAddress,
 } from "../generated/ExchangeFactory/ExchangeFactory";
-import { Exchange as ExchangeContract } from "../generated/ExchangeFactory/Exchange";
+import {
+  Exchange as ExchangeContract,
+  Swap as SwapParams,
+  Transfer as TransferParams,
+} from "../generated/ExchangeFactory/Exchange";
 import { ERC20 } from "../generated/ExchangeFactory/ERC20";
-import { Exchange, Token } from "../generated/schema";
+import { Exchange, Token, Transfer, Swap } from "../generated/schema";
 
 export function handleNewExchange(event: NewExchange): void {
   // Entities can be loaded from the store using a string ID; this ID
   // needs to be unique across all entities of the same type
-  // let entity = ExampleEntity.load(event.transaction.from.toHex())
 
   let exchange = Exchange.load(event.transaction.hash.toHex());
   // Entities only exist after they have been saved to the store;
   // `null` checks allow to create entities on demand
   if (!exchange) {
-    // entity = new ExampleEntity(event.transaction.from.toHex())
     exchange = new Exchange(event.transaction.hash.toHex());
   }
 
-  // Entity fields can be set based on event parameters
   exchange.creator = event.params.creator;
   exchange.exchangeAddress = event.params.exchangeAddress;
 
   let exchangeContract = ExchangeContract.bind(event.params.exchangeAddress);
+
+  exchange.baseTokenReserveQty = exchangeContract.internalBalances().value0;
+  exchange.quoteTokenReserveQty = exchangeContract.internalBalances().value1;
+  exchange.kLast = exchangeContract.internalBalances().value2;
+
+  exchange.minimumLiquidity = exchangeContract.MINIMUM_LIQUIDITY();
+
+  exchange.totalSupply = exchangeContract.totalSupply();
 
   let baseToken = Token.load(exchangeContract.baseToken().toHex());
   if (!baseToken) {
@@ -65,30 +74,34 @@ export function handleNewExchange(event: NewExchange): void {
   exchange.baseToken = baseToken.id;
   exchange.quoteToken = quoteToken.id;
 
-  // Entities can be written to the store with `.save()`
   exchange.save();
-
-  // Note: If a handler doesn't require existing field values, it is faster
-  // _not_ to load the entity from the store. Instead, create it fresh with
-  // `new Entity(...)`, set the fields that should be updated and save the
-  // entity back to the store. Fields that were not set or unset remain
-  // unchanged, allowing for partial updates to be applied.
-
-  // It is also possible to access smart contracts from mappings. For
-  // example, the contract that has emitted the event can be connected to
-  // with:
-  //
-  // let contract = Contract.bind(event.address)
-  //
-  // The following functions can then be called on this contract to access
-  // state variables and other data:
-  //
-  // - contract.exchangeAddressByTokenAddress(...)
-  // - contract.feeAddress(...)
-  // - contract.isValidExchangeAddress(...)
-  // - contract.owner(...)
 }
 
-// export function handleOwnershipTransferred(event: OwnershipTransferred): void {}
+export function handleSwap(event: SwapParams): void {
+  let swap = Swap.load(event.transaction.hash.toHex());
 
-// export function handleSetFeeAddress(event: SetFeeAddress): void {}
+  if (!swap) {
+    swap = new Swap(event.transaction.hash.toHex());
+  }
+
+  swap.baseTokenQtyIn = event.params.baseTokenQtyIn;
+  swap.quoteTokenQtyIn = event.params.quoteTokenQtyIn;
+  swap.baseTokenQtyOut = event.params.baseTokenQtyOut;
+  swap.quoteTokenQtyOut = event.params.quoteTokenQtyOut;
+  swap.sender = event.params.sender;
+  swap.save();
+}
+
+export function handleTransfer(event: TransferParams): void {
+  let tranfer = Transfer.load(event.transaction.hash.toHex());
+
+  if (!tranfer) {
+    tranfer = new Transfer(event.transaction.hash.toHex());
+  }
+
+  tranfer.from = event.params.from;
+  tranfer.to = event.params.to;
+  tranfer.value = event.params.value;
+
+  tranfer.save();
+}

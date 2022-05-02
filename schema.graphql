@@ -13,4 +13,25 @@ type Exchange @entity {
   exchangeAddress: Bytes! # address
   baseToken: Token!
   quoteToken: Token!
+  minimumLiquidity: BigInt!
+  totalSupply: BigInt!
+  baseTokenReserveQty: BigInt!
+  quoteTokenReserveQty: BigInt!
+  kLast: BigInt!
+}
+
+type Transfer @entity {
+  id: ID!
+  from: Bytes! # address
+  to: Bytes # address
+  value: BigInt!
+}
+
+type Swap @entity {
+  id: ID!
+  baseTokenQtyIn: BigInt!
+  baseTokenQtyOut: BigInt!
+  quoteTokenQtyIn: BigInt!
+  quoteTokenQtyOut: BigInt!
+  sender: Bytes!
 }

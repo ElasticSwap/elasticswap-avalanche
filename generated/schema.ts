@@ -103,6 +103,11 @@ export class Exchange extends Entity {
     this.set("exchangeAddress", Value.fromBytes(Bytes.empty()));
     this.set("baseToken", Value.fromString(""));
     this.set("quoteToken", Value.fromString(""));
+    this.set("minimumLiquidity", Value.fromBigInt(BigInt.zero()));
+    this.set("totalSupply", Value.fromBigInt(BigInt.zero()));
+    this.set("baseTokenReserveQty", Value.fromBigInt(BigInt.zero()));
+    this.set("quoteTokenReserveQty", Value.fromBigInt(BigInt.zero()));
+    this.set("kLast", Value.fromBigInt(BigInt.zero()));
   }
 
   save(): void {
@@ -164,5 +169,203 @@ export class Exchange extends Entity {
 
   set quoteToken(value: string) {
     this.set("quoteToken", Value.fromString(value));
+  }
+
+  get minimumLiquidity(): BigInt {
+    let value = this.get("minimumLiquidity");
+    return value!.toBigInt();
+  }
+
+  set minimumLiquidity(value: BigInt) {
+    this.set("minimumLiquidity", Value.fromBigInt(value));
+  }
+
+  get totalSupply(): BigInt {
+    let value = this.get("totalSupply");
+    return value!.toBigInt();
+  }
+
+  set totalSupply(value: BigInt) {
+    this.set("totalSupply", Value.fromBigInt(value));
+  }
+
+  get baseTokenReserveQty(): BigInt {
+    let value = this.get("baseTokenReserveQty");
+    return value!.toBigInt();
+  }
+
+  set baseTokenReserveQty(value: BigInt) {
+    this.set("baseTokenReserveQty", Value.fromBigInt(value));
+  }
+
+  get quoteTokenReserveQty(): BigInt {
+    let value = this.get("quoteTokenReserveQty");
+    return value!.toBigInt();
+  }
+
+  set quoteTokenReserveQty(value: BigInt) {
+    this.set("quoteTokenReserveQty", Value.fromBigInt(value));
+  }
+
+  get kLast(): BigInt {
+    let value = this.get("kLast");
+    return value!.toBigInt();
+  }
+
+  set kLast(value: BigInt) {
+    this.set("kLast", Value.fromBigInt(value));
+  }
+}
+
+export class Transfer extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+
+    this.set("from", Value.fromBytes(Bytes.empty()));
+    this.set("value", Value.fromBigInt(BigInt.zero()));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save Transfer entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type Transfer must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("Transfer", id.toString(), this);
+    }
+  }
+
+  static load(id: string): Transfer | null {
+    return changetype<Transfer | null>(store.get("Transfer", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get from(): Bytes {
+    let value = this.get("from");
+    return value!.toBytes();
+  }
+
+  set from(value: Bytes) {
+    this.set("from", Value.fromBytes(value));
+  }
+
+  get to(): Bytes | null {
+    let value = this.get("to");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set to(value: Bytes | null) {
+    if (!value) {
+      this.unset("to");
+    } else {
+      this.set("to", Value.fromBytes(<Bytes>value));
+    }
+  }
+
+  get value(): BigInt {
+    let value = this.get("value");
+    return value!.toBigInt();
+  }
+
+  set value(value: BigInt) {
+    this.set("value", Value.fromBigInt(value));
+  }
+}
+
+export class Swap extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+
+    this.set("baseTokenQtyIn", Value.fromBigInt(BigInt.zero()));
+    this.set("baseTokenQtyOut", Value.fromBigInt(BigInt.zero()));
+    this.set("quoteTokenQtyIn", Value.fromBigInt(BigInt.zero()));
+    this.set("quoteTokenQtyOut", Value.fromBigInt(BigInt.zero()));
+    this.set("sender", Value.fromBytes(Bytes.empty()));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save Swap entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type Swap must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("Swap", id.toString(), this);
+    }
+  }
+
+  static load(id: string): Swap | null {
+    return changetype<Swap | null>(store.get("Swap", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get baseTokenQtyIn(): BigInt {
+    let value = this.get("baseTokenQtyIn");
+    return value!.toBigInt();
+  }
+
+  set baseTokenQtyIn(value: BigInt) {
+    this.set("baseTokenQtyIn", Value.fromBigInt(value));
+  }
+
+  get baseTokenQtyOut(): BigInt {
+    let value = this.get("baseTokenQtyOut");
+    return value!.toBigInt();
+  }
+
+  set baseTokenQtyOut(value: BigInt) {
+    this.set("baseTokenQtyOut", Value.fromBigInt(value));
+  }
+
+  get quoteTokenQtyIn(): BigInt {
+    let value = this.get("quoteTokenQtyIn");
+    return value!.toBigInt();
+  }
+
+  set quoteTokenQtyIn(value: BigInt) {
+    this.set("quoteTokenQtyIn", Value.fromBigInt(value));
+  }
+
+  get quoteTokenQtyOut(): BigInt {
+    let value = this.get("quoteTokenQtyOut");
+    return value!.toBigInt();
+  }
+
+  set quoteTokenQtyOut(value: BigInt) {
+    this.set("quoteTokenQtyOut", Value.fromBigInt(value));
+  }
+
+  get sender(): Bytes {
+    let value = this.get("sender");
+    return value!.toBytes();
+  }
+
+  set sender(value: Bytes) {
+    this.set("sender", Value.fromBytes(value));
   }
 }
