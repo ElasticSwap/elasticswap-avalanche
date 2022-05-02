@@ -1,6 +1,16 @@
-type ExampleEntity @entity {
+type Token @entity {
   id: ID!
-  count: BigInt!
+  symbol: String!
+  name: String!
+  decimals: BigDecimal!
+  totalSupply: BigInt!
+  exchangeFactoryAddress: Bytes!
+}
+
+type Exchange @entity {
+  id: ID!
   creator: Bytes! # address
   exchangeAddress: Bytes! # address
+  baseToken: Token!
+  quoteToken: Token!
 }

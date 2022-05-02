@@ -1,4 +1,4 @@
-specVersion: 0.0.1
+specVersion: 0.0.2
 schema:
   file: ./schema.graphql
 dataSources:
@@ -14,16 +14,24 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - NewExchange
-        - OwnershipTransferred
-        - SetFeeAddress
+        # - OwnershipTransferred
+        # - SetFeeAddress
       abis:
         - name: ExchangeFactory
           file: ./abis/ExchangeFactory.json
+        - name: Exchange
+          file: ./abis/Exchange.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: ERC20SymbolBytes
+          file: ./abis/ERC20SymbolBytes.json
+        - name: ERC20NameBytes
+          file: ./abis/ERC20NameBytes.json
       eventHandlers:
         - event: NewExchange(indexed address,indexed address)
           handler: handleNewExchange
-        - event: OwnershipTransferred(indexed address,indexed address)
-          handler: handleOwnershipTransferred
-        - event: SetFeeAddress(indexed address)
-          handler: handleSetFeeAddress
+        # - event: OwnershipTransferred(indexed address,indexed address)
+        #   handler: handleOwnershipTransferred
+        # - event: SetFeeAddress(indexed address)
+        #   handler: handleSetFeeAddress
       file: ./src/mapping.ts
