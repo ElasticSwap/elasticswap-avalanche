@@ -1,6 +1,37 @@
-type ExampleEntity @entity {
+type Token @entity {
   id: ID!
-  count: BigInt!
+  symbol: String!
+  name: String!
+  decimals: BigDecimal!
+  totalSupply: BigInt!
+  exchangeFactoryAddress: Bytes!
+}
+
+type Exchange @entity {
+  id: ID!
   creator: Bytes! # address
   exchangeAddress: Bytes! # address
+  baseToken: Token!
+  quoteToken: Token!
+  minimumLiquidity: BigInt!
+  totalSupply: BigInt!
+  baseTokenReserveQty: BigInt!
+  quoteTokenReserveQty: BigInt!
+  kLast: BigInt!
+}
+
+type Transfer @entity {
+  id: ID!
+  from: Bytes! # address
+  to: Bytes # address
+  value: BigInt!
+}
+
+type Swap @entity {
+  id: ID!
+  baseTokenQtyIn: BigInt!
+  baseTokenQtyOut: BigInt!
+  quoteTokenQtyIn: BigInt!
+  quoteTokenQtyOut: BigInt!
+  sender: Bytes!
 }
