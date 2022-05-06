@@ -63,19 +63,26 @@ export function handleNewExchange(event: NewExchange): void {
   quoteToken.exchange = event.params.exchangeAddress.toHex();
   quoteToken.save();
 
-  exchange.baseTokenQty = ERC20.bind(exchangeContract.baseToken()).balanceOf(
-    event.params.exchangeAddress
-  );
-  exchange.quoteTokenQty = ERC20.bind(exchangeContract.quoteToken()).balanceOf(
-    event.params.exchangeAddress
-  );
+  exchange.baseTokenQty = ERC20.bind(
+    exchangeContract.baseToken()
+  ).try_balanceOf(event.params.exchangeAddress).value;
+
+  exchange.quoteTokenQty = ERC20.bind(
+    exchangeContract.quoteToken()
+  ).try_balanceOf(event.params.exchangeAddress).value;
 
   exchange.baseToken = baseToken.id;
   exchange.quoteToken = quoteToken.id;
 
-  exchange.derivedBaseTokenLiquidity = BigInt.fromI32(0);
-  exchange.derivedQuoteTokenLiquidity = BigInt.fromI32(0);
+  exchange.derivedBaseTokenLiquidity = BigDecimal.zero();
+  exchange.derivedQuoteTokenLiquidity = BigDecimal.zero();
   exchange.dailyTxns = BigInt.fromI32(0);
+
+  exchange.name = exchangeContract.name();
+  exchange.symbol = exchangeContract.symbol();
+  exchange.decimals = BigDecimal.fromString(
+    exchangeContract.decimals().toString()
+  );
 
   ExchangeTemplate.create(event.params.exchangeAddress);
 

@@ -194,6 +194,9 @@ export class Exchange extends Entity {
 
     this.set("creator", Value.fromBytes(Bytes.empty()));
     this.set("exchangeAddress", Value.fromBytes(Bytes.empty()));
+    this.set("name", Value.fromString(""));
+    this.set("symbol", Value.fromString(""));
+    this.set("decimals", Value.fromBigDecimal(BigDecimal.zero()));
     this.set("baseToken", Value.fromString(""));
     this.set("quoteToken", Value.fromString(""));
     this.set("minimumLiquidity", Value.fromBigInt(BigInt.zero()));
@@ -204,8 +207,14 @@ export class Exchange extends Entity {
     this.set("baseTokenQty", Value.fromBigInt(BigInt.zero()));
     this.set("quoteTokenQty", Value.fromBigInt(BigInt.zero()));
     this.set("createdAtTimestamp", Value.fromBigInt(BigInt.zero()));
-    this.set("derivedBaseTokenLiquidity", Value.fromBigInt(BigInt.zero()));
-    this.set("derivedQuoteTokenLiquidity", Value.fromBigInt(BigInt.zero()));
+    this.set(
+      "derivedBaseTokenLiquidity",
+      Value.fromBigDecimal(BigDecimal.zero())
+    );
+    this.set(
+      "derivedQuoteTokenLiquidity",
+      Value.fromBigDecimal(BigDecimal.zero())
+    );
     this.set("dailyTxns", Value.fromBigInt(BigInt.zero()));
   }
 
@@ -250,6 +259,33 @@ export class Exchange extends Entity {
 
   set exchangeAddress(value: Bytes) {
     this.set("exchangeAddress", Value.fromBytes(value));
+  }
+
+  get name(): string {
+    let value = this.get("name");
+    return value!.toString();
+  }
+
+  set name(value: string) {
+    this.set("name", Value.fromString(value));
+  }
+
+  get symbol(): string {
+    let value = this.get("symbol");
+    return value!.toString();
+  }
+
+  set symbol(value: string) {
+    this.set("symbol", Value.fromString(value));
+  }
+
+  get decimals(): BigDecimal {
+    let value = this.get("decimals");
+    return value!.toBigDecimal();
+  }
+
+  set decimals(value: BigDecimal) {
+    this.set("decimals", Value.fromBigDecimal(value));
   }
 
   get baseToken(): string {
@@ -342,22 +378,22 @@ export class Exchange extends Entity {
     this.set("createdAtTimestamp", Value.fromBigInt(value));
   }
 
-  get derivedBaseTokenLiquidity(): BigInt {
+  get derivedBaseTokenLiquidity(): BigDecimal {
     let value = this.get("derivedBaseTokenLiquidity");
-    return value!.toBigInt();
+    return value!.toBigDecimal();
   }
 
-  set derivedBaseTokenLiquidity(value: BigInt) {
-    this.set("derivedBaseTokenLiquidity", Value.fromBigInt(value));
+  set derivedBaseTokenLiquidity(value: BigDecimal) {
+    this.set("derivedBaseTokenLiquidity", Value.fromBigDecimal(value));
   }
 
-  get derivedQuoteTokenLiquidity(): BigInt {
+  get derivedQuoteTokenLiquidity(): BigDecimal {
     let value = this.get("derivedQuoteTokenLiquidity");
-    return value!.toBigInt();
+    return value!.toBigDecimal();
   }
 
-  set derivedQuoteTokenLiquidity(value: BigInt) {
-    this.set("derivedQuoteTokenLiquidity", Value.fromBigInt(value));
+  set derivedQuoteTokenLiquidity(value: BigDecimal) {
+    this.set("derivedQuoteTokenLiquidity", Value.fromBigDecimal(value));
   }
 
   get transfers(): Array<string> {

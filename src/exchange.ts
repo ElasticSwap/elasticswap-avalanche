@@ -50,16 +50,16 @@ export function handleSwap(event: SwapParams): void {
   exchange!.dailyTxns = exchangeDayData.dailyTxns;
 
   exchange!.derivedBaseTokenLiquidity = exchange!.derivedBaseTokenLiquidity.plus(
-    event.params.baseTokenQtyIn
+    event.params.baseTokenQtyIn.toBigDecimal()
   );
   exchange!.derivedBaseTokenLiquidity = exchange!.derivedBaseTokenLiquidity.minus(
-    event.params.baseTokenQtyOut
+    event.params.baseTokenQtyOut.toBigDecimal()
   );
   exchange!.derivedQuoteTokenLiquidity = exchange!.derivedQuoteTokenLiquidity.plus(
-    event.params.quoteTokenQtyIn
+    event.params.quoteTokenQtyIn.toBigDecimal()
   );
   exchange!.derivedQuoteTokenLiquidity = exchange!.derivedQuoteTokenLiquidity.minus(
-    event.params.quoteTokenQtyOut
+    event.params.quoteTokenQtyOut.toBigDecimal()
   );
 
   exchange!.save();
@@ -102,11 +102,11 @@ export function handleAddLiquidity(event: AddLiquidityParams): void {
   let exchange = Exchange.load(event.address.toHexString());
 
   exchange!.derivedBaseTokenLiquidity = exchange!.derivedBaseTokenLiquidity.plus(
-    event.params.baseTokenQtyAdded
+    event.params.baseTokenQtyAdded.toBigDecimal()
   );
 
   exchange!.derivedQuoteTokenLiquidity = exchange!.derivedQuoteTokenLiquidity.plus(
-    event.params.quoteTokenQtyAdded
+    event.params.quoteTokenQtyAdded.toBigDecimal()
   );
 
   exchange!.save();
@@ -147,11 +147,11 @@ export function handleRemoveLiquidity(event: RemoveLiquidityParams): void {
   let exchange = Exchange.load(event.address.toHexString());
 
   exchange!.derivedBaseTokenLiquidity = exchange!.derivedBaseTokenLiquidity.minus(
-    event.params.baseTokenQtyRemoved
+    event.params.baseTokenQtyRemoved.toBigDecimal()
   );
 
   exchange!.derivedQuoteTokenLiquidity = exchange!.derivedQuoteTokenLiquidity.minus(
-    event.params.quoteTokenQtyRemoved
+    event.params.quoteTokenQtyRemoved.toBigDecimal()
   );
 
   exchange!.save();

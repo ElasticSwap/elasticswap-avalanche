@@ -21,6 +21,9 @@ type Exchange @entity {
   id: ID!
   creator: Bytes! # address
   exchangeAddress: Bytes! # address
+  name: String!
+  symbol: String!
+  decimals: BigDecimal!
   baseToken: Token!
   quoteToken: Token!
   minimumLiquidity: BigInt!
@@ -31,8 +34,8 @@ type Exchange @entity {
   baseTokenQty: BigInt!
   quoteTokenQty: BigInt!
   createdAtTimestamp: BigInt!
-  derivedBaseTokenLiquidity: BigInt!
-  derivedQuoteTokenLiquidity: BigInt!
+  derivedBaseTokenLiquidity: BigDecimal!
+  derivedQuoteTokenLiquidity: BigDecimal!
   transfers: [Transfer!]! @derivedFrom(field: "exchange")
   swaps: [Swap!]! @derivedFrom(field: "exchange")
   liquidities: [Liquidity!]! @derivedFrom(field: "exchange")
