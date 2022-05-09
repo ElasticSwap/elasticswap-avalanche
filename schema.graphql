@@ -31,8 +31,8 @@ type Exchange @entity {
   baseTokenReserveQty: BigInt!
   quoteTokenReserveQty: BigInt!
   kLast: BigInt!
-  baseTokenQty: BigInt!
-  quoteTokenQty: BigInt!
+  baseTokenQty: BigDecimal!
+  quoteTokenQty: BigDecimal!
   createdAtTimestamp: BigInt!
   derivedBaseTokenLiquidity: BigDecimal!
   derivedQuoteTokenLiquidity: BigDecimal!

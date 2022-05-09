@@ -1,4 +1,4 @@
-import { BigDecimal, BigInt } from "@graphprotocol/graph-ts";
+import { BigDecimal, BigInt, log } from "@graphprotocol/graph-ts";
 import { NewExchange } from "../generated/ExchangeFactory/ExchangeFactory";
 import { Exchange as ExchangeContract } from "../generated/ExchangeFactory/Exchange";
 import { ERC20 } from "../generated/ExchangeFactory/ERC20";
@@ -63,13 +63,22 @@ export function handleNewExchange(event: NewExchange): void {
   quoteToken.exchange = event.params.exchangeAddress.toHex();
   quoteToken.save();
 
-  exchange.baseTokenQty = ERC20.bind(
-    exchangeContract.baseToken()
-  ).try_balanceOf(event.params.exchangeAddress).value;
+  log.info("Getting Balance For Address: {}", [
+    exchangeContract.baseToken().toHexString(),
+  ]);
 
-  exchange.quoteTokenQty = ERC20.bind(
-    exchangeContract.quoteToken()
-  ).try_balanceOf(event.params.exchangeAddress).value;
+  exchange.baseTokenQty = ERC20.bind(exchangeContract.baseToken())
+    .balanceOf(event.params.exchangeAddress)
+    .toBigDecimal();
+
+  log.info("Base Token for Address: {} is {}", [
+    exchangeContract.baseToken().toHexString(),
+    exchange.baseTokenQty.toString(),
+  ]);
+
+  exchange.quoteTokenQty = ERC20.bind(exchangeContract.quoteToken())
+    .balanceOf(event.params.exchangeAddress)
+    .toBigDecimal();
 
   exchange.baseToken = baseToken.id;
   exchange.quoteToken = quoteToken.id;

@@ -204,8 +204,8 @@ export class Exchange extends Entity {
     this.set("baseTokenReserveQty", Value.fromBigInt(BigInt.zero()));
     this.set("quoteTokenReserveQty", Value.fromBigInt(BigInt.zero()));
     this.set("kLast", Value.fromBigInt(BigInt.zero()));
-    this.set("baseTokenQty", Value.fromBigInt(BigInt.zero()));
-    this.set("quoteTokenQty", Value.fromBigInt(BigInt.zero()));
+    this.set("baseTokenQty", Value.fromBigDecimal(BigDecimal.zero()));
+    this.set("quoteTokenQty", Value.fromBigDecimal(BigDecimal.zero()));
     this.set("createdAtTimestamp", Value.fromBigInt(BigInt.zero()));
     this.set(
       "derivedBaseTokenLiquidity",
@@ -351,22 +351,22 @@ export class Exchange extends Entity {
     this.set("kLast", Value.fromBigInt(value));
   }
 
-  get baseTokenQty(): BigInt {
+  get baseTokenQty(): BigDecimal {
     let value = this.get("baseTokenQty");
-    return value!.toBigInt();
+    return value!.toBigDecimal();
   }
 
-  set baseTokenQty(value: BigInt) {
-    this.set("baseTokenQty", Value.fromBigInt(value));
+  set baseTokenQty(value: BigDecimal) {
+    this.set("baseTokenQty", Value.fromBigDecimal(value));
   }
 
-  get quoteTokenQty(): BigInt {
+  get quoteTokenQty(): BigDecimal {
     let value = this.get("quoteTokenQty");
-    return value!.toBigInt();
+    return value!.toBigDecimal();
   }
 
-  set quoteTokenQty(value: BigInt) {
-    this.set("quoteTokenQty", Value.fromBigInt(value));
+  set quoteTokenQty(value: BigDecimal) {
+    this.set("quoteTokenQty", Value.fromBigDecimal(value));
   }
 
   get createdAtTimestamp(): BigInt {

@@ -14,8 +14,10 @@ import {
   Exchange,
   ExchangeDayData,
 } from "../generated/schema";
+import { updateExchangeTotalSupply } from "./helper";
 
 export function handleSwap(event: SwapParams): void {
+  updateExchangeTotalSupply(event.address);
   let swap = Swap.load(event.transaction.hash.toHex());
 
   if (!swap) {
@@ -75,6 +77,7 @@ export function handleSwap(event: SwapParams): void {
 }
 
 export function handleTransfer(event: TransferParams): void {
+  updateExchangeTotalSupply(event.address);
   let tranfer = Transfer.load(event.transaction.hash.toHex());
 
   if (!tranfer) {
@@ -91,6 +94,7 @@ export function handleTransfer(event: TransferParams): void {
 }
 
 export function handleAddLiquidity(event: AddLiquidityParams): void {
+  updateExchangeTotalSupply(event.address);
   let addLiquidity = Liquidity.load(event.transaction.hash.toHex());
 
   if (!addLiquidity) {
@@ -120,6 +124,7 @@ export function handleAddLiquidity(event: AddLiquidityParams): void {
 }
 
 export function handleApproval(event: ApprovalParams): void {
+  updateExchangeTotalSupply(event.address);
   let approval = Approval.load(event.transaction.hash.toHex());
 
   if (!approval) {
@@ -136,6 +141,7 @@ export function handleApproval(event: ApprovalParams): void {
 }
 
 export function handleRemoveLiquidity(event: RemoveLiquidityParams): void {
+  updateExchangeTotalSupply(event.address);
   let removeLiquidity = Liquidity.load(event.transaction.hash.toHex());
 
   if (!removeLiquidity) {
