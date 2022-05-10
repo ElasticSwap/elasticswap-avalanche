@@ -104,6 +104,10 @@ export class ExchangeDayData extends Entity {
     this.set("quoteToken", Value.fromString(""));
     this.set("exchange", Value.fromString(""));
     this.set("dailyTxns", Value.fromBigInt(BigInt.zero()));
+    this.set("swapTxns", Value.fromBigInt(BigInt.zero()));
+    this.set("transferTxns", Value.fromBigInt(BigInt.zero()));
+    this.set("addLiquidityTxns", Value.fromBigInt(BigInt.zero()));
+    this.set("removeLiquidityTxns", Value.fromBigInt(BigInt.zero()));
     this.set("createdAtTimestamp", Value.fromBigInt(BigInt.zero()));
   }
 
@@ -177,6 +181,76 @@ export class ExchangeDayData extends Entity {
     this.set("dailyTxns", Value.fromBigInt(value));
   }
 
+  get swapTxns(): BigInt {
+    let value = this.get("swapTxns");
+    return value!.toBigInt();
+  }
+
+  set swapTxns(value: BigInt) {
+    this.set("swapTxns", Value.fromBigInt(value));
+  }
+
+  get transferTxns(): BigInt {
+    let value = this.get("transferTxns");
+    return value!.toBigInt();
+  }
+
+  set transferTxns(value: BigInt) {
+    this.set("transferTxns", Value.fromBigInt(value));
+  }
+
+  get addLiquidityTxns(): BigInt {
+    let value = this.get("addLiquidityTxns");
+    return value!.toBigInt();
+  }
+
+  set addLiquidityTxns(value: BigInt) {
+    this.set("addLiquidityTxns", Value.fromBigInt(value));
+  }
+
+  get removeLiquidityTxns(): BigInt {
+    let value = this.get("removeLiquidityTxns");
+    return value!.toBigInt();
+  }
+
+  set removeLiquidityTxns(value: BigInt) {
+    this.set("removeLiquidityTxns", Value.fromBigInt(value));
+  }
+
+  get baseTokenLiquidity(): BigDecimal | null {
+    let value = this.get("baseTokenLiquidity");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigDecimal();
+    }
+  }
+
+  set baseTokenLiquidity(value: BigDecimal | null) {
+    if (!value) {
+      this.unset("baseTokenLiquidity");
+    } else {
+      this.set("baseTokenLiquidity", Value.fromBigDecimal(<BigDecimal>value));
+    }
+  }
+
+  get quoteTokenLiquidity(): BigDecimal | null {
+    let value = this.get("quoteTokenLiquidity");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigDecimal();
+    }
+  }
+
+  set quoteTokenLiquidity(value: BigDecimal | null) {
+    if (!value) {
+      this.unset("quoteTokenLiquidity");
+    } else {
+      this.set("quoteTokenLiquidity", Value.fromBigDecimal(<BigDecimal>value));
+    }
+  }
+
   get createdAtTimestamp(): BigInt {
     let value = this.get("createdAtTimestamp");
     return value!.toBigInt();
@@ -197,6 +271,10 @@ export class ExchangeHourData extends Entity {
     this.set("quoteToken", Value.fromString(""));
     this.set("exchange", Value.fromString(""));
     this.set("hourlyTxns", Value.fromBigInt(BigInt.zero()));
+    this.set("swapTxns", Value.fromBigInt(BigInt.zero()));
+    this.set("transferTxns", Value.fromBigInt(BigInt.zero()));
+    this.set("addLiquidityTxns", Value.fromBigInt(BigInt.zero()));
+    this.set("removeLiquidityTxns", Value.fromBigInt(BigInt.zero()));
     this.set("createdAtTimestamp", Value.fromBigInt(BigInt.zero()));
   }
 
@@ -270,6 +348,76 @@ export class ExchangeHourData extends Entity {
 
   set hourlyTxns(value: BigInt) {
     this.set("hourlyTxns", Value.fromBigInt(value));
+  }
+
+  get swapTxns(): BigInt {
+    let value = this.get("swapTxns");
+    return value!.toBigInt();
+  }
+
+  set swapTxns(value: BigInt) {
+    this.set("swapTxns", Value.fromBigInt(value));
+  }
+
+  get transferTxns(): BigInt {
+    let value = this.get("transferTxns");
+    return value!.toBigInt();
+  }
+
+  set transferTxns(value: BigInt) {
+    this.set("transferTxns", Value.fromBigInt(value));
+  }
+
+  get addLiquidityTxns(): BigInt {
+    let value = this.get("addLiquidityTxns");
+    return value!.toBigInt();
+  }
+
+  set addLiquidityTxns(value: BigInt) {
+    this.set("addLiquidityTxns", Value.fromBigInt(value));
+  }
+
+  get removeLiquidityTxns(): BigInt {
+    let value = this.get("removeLiquidityTxns");
+    return value!.toBigInt();
+  }
+
+  set removeLiquidityTxns(value: BigInt) {
+    this.set("removeLiquidityTxns", Value.fromBigInt(value));
+  }
+
+  get baseTokenLiquidity(): BigDecimal | null {
+    let value = this.get("baseTokenLiquidity");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigDecimal();
+    }
+  }
+
+  set baseTokenLiquidity(value: BigDecimal | null) {
+    if (!value) {
+      this.unset("baseTokenLiquidity");
+    } else {
+      this.set("baseTokenLiquidity", Value.fromBigDecimal(<BigDecimal>value));
+    }
+  }
+
+  get quoteTokenLiquidity(): BigDecimal | null {
+    let value = this.get("quoteTokenLiquidity");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigDecimal();
+    }
+  }
+
+  set quoteTokenLiquidity(value: BigDecimal | null) {
+    if (!value) {
+      this.unset("quoteTokenLiquidity");
+    } else {
+      this.set("quoteTokenLiquidity", Value.fromBigDecimal(<BigDecimal>value));
+    }
   }
 
   get createdAtTimestamp(): BigInt {

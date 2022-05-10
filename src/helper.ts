@@ -7,6 +7,13 @@ import {
 import { Exchange as ExchangeContract } from "../generated/ExchangeFactory/Exchange";
 import { ERC20 } from "../generated/ExchangeFactory/ERC20";
 
+export enum TransactionType {
+  SWAP,
+  AddLIQUIDITY,
+  REMOVELIQUIDITY,
+  TRANSFER,
+}
+
 export function updateExchangeTotalSupplyAndPrice(
   exchangeAddress: Address
 ): void {
@@ -32,7 +39,8 @@ export function updateExchangeTotalSupplyAndPrice(
 
 export function updateNumberOfTransactions(
   exchangeAddress: Address,
-  eventTimestamp: BigInt
+  eventTimestamp: BigInt,
+  transactionType: TransactionType
 ): void {
   let timestamp = eventTimestamp.toI32();
 
@@ -63,6 +71,10 @@ export function updateNumberOfTransactions(
     exchangeDayData.quoteToken = exchange!.quoteToken;
     exchangeDayData.createdAtTimestamp = eventTimestamp;
     exchangeDayData.dailyTxns = BigInt.fromI32(0);
+    exchangeDayData.swapTxns = BigInt.fromI32(0);
+    exchangeDayData.addLiquidityTxns = BigInt.fromI32(0);
+    exchangeDayData.removeLiquidityTxns = BigInt.fromI32(0);
+    exchangeDayData.transferTxns = BigInt.fromI32(0);
   }
 
   if (!exchangeHourData) {
@@ -73,6 +85,10 @@ export function updateNumberOfTransactions(
     exchangeHourData.quoteToken = exchange!.quoteToken;
     exchangeHourData.createdAtTimestamp = eventTimestamp;
     exchangeHourData.hourlyTxns = BigInt.fromI32(0);
+    exchangeHourData.swapTxns = BigInt.fromI32(0);
+    exchangeHourData.addLiquidityTxns = BigInt.fromI32(0);
+    exchangeHourData.removeLiquidityTxns = BigInt.fromI32(0);
+    exchangeHourData.transferTxns = BigInt.fromI32(0);
   }
 
   exchangeDayData.dailyTxns = exchangeDayData.dailyTxns.plus(BigInt.fromI32(1));
@@ -81,7 +97,42 @@ export function updateNumberOfTransactions(
     BigInt.fromI32(1)
   );
 
+  if (transactionType === TransactionType.SWAP) {
+    exchangeDayData.swapTxns = exchangeDayData.swapTxns.plus(BigInt.fromI32(1));
+    exchangeHourData.swapTxns = exchangeHourData.swapTxns.plus(
+      BigInt.fromI32(1)
+    );
+  }
+
+  if (transactionType === TransactionType.AddLIQUIDITY) {
+    exchangeDayData.addLiquidityTxns = exchangeDayData.addLiquidityTxns.plus(
+      BigInt.fromI32(1)
+    );
+    exchangeHourData.addLiquidityTxns = exchangeHourData.addLiquidityTxns.plus(
+      BigInt.fromI32(1)
+    );
+  }
+
+  if (transactionType === TransactionType.REMOVELIQUIDITY) {
+    exchangeDayData.removeLiquidityTxns = exchangeDayData.removeLiquidityTxns.plus(
+      BigInt.fromI32(1)
+    );
+    exchangeHourData.removeLiquidityTxns = exchangeHourData.removeLiquidityTxns.plus(
+      BigInt.fromI32(1)
+    );
+  }
+
+  if (transactionType === TransactionType.TRANSFER) {
+    exchangeDayData.transferTxns = exchangeDayData.transferTxns.plus(
+      BigInt.fromI32(1)
+    );
+    exchangeHourData.transferTxns = exchangeHourData.transferTxns.plus(
+      BigInt.fromI32(1)
+    );
+  }
+
   exchangeDayData.save();
+  exchangeHourData.save();
 
   exchange!.dailyTxns = exchangeDayData.dailyTxns;
   exchange!.hourlyTxns = exchangeHourData.hourlyTxns;

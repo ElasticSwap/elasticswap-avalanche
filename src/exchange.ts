@@ -15,6 +15,7 @@ import {
   ExchangeDayData,
 } from "../generated/schema";
 import {
+  TransactionType,
   updateExchangeTotalSupplyAndPrice,
   updateNumberOfTransactions,
 } from "./helper";
@@ -27,7 +28,11 @@ export function handleSwap(event: SwapParams): void {
     swap = new Swap(event.transaction.hash.toHex());
   }
 
-  updateNumberOfTransactions(event.address, event.block.timestamp);
+  updateNumberOfTransactions(
+    event.address,
+    event.block.timestamp,
+    TransactionType.SWAP
+  );
 
   swap.baseTokenQtyIn = event.params.baseTokenQtyIn;
   swap.quoteTokenQtyIn = event.params.quoteTokenQtyIn;
@@ -47,6 +52,12 @@ export function handleTransfer(event: TransferParams): void {
     tranfer = new Transfer(event.transaction.hash.toHex());
   }
 
+  updateNumberOfTransactions(
+    event.address,
+    event.block.timestamp,
+    TransactionType.TRANSFER
+  );
+
   tranfer.exchange = event.address.toHexString();
   tranfer.from = event.params.from;
   tranfer.to = event.params.to;
@@ -63,6 +74,12 @@ export function handleAddLiquidity(event: AddLiquidityParams): void {
   if (!addLiquidity) {
     addLiquidity = new LiquidityEvent(event.transaction.hash.toHex());
   }
+
+  updateNumberOfTransactions(
+    event.address,
+    event.block.timestamp,
+    TransactionType.AddLIQUIDITY
+  );
 
   addLiquidity.exchange = event.address.toHexString();
 
@@ -98,6 +115,12 @@ export function handleRemoveLiquidity(event: RemoveLiquidityParams): void {
   if (!removeLiquidity) {
     removeLiquidity = new LiquidityEvent(event.transaction.hash.toHex());
   }
+
+  updateNumberOfTransactions(
+    event.address,
+    event.block.timestamp,
+    TransactionType.REMOVELIQUIDITY
+  );
 
   removeLiquidity.exchange = event.address.toHexString();
 
