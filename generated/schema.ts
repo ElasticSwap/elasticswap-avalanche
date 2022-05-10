@@ -423,6 +423,7 @@ export class Exchange extends Entity {
     this.set("quoteTokenQty", Value.fromBigDecimal(BigDecimal.zero()));
     this.set("createdAtTimestamp", Value.fromBigInt(BigInt.zero()));
     this.set("dailyTxns", Value.fromBigInt(BigInt.zero()));
+    this.set("hourlyTxns", Value.fromBigInt(BigInt.zero()));
   }
 
   save(): void {
@@ -657,21 +658,31 @@ export class Exchange extends Entity {
     this.set("dailyTxns", Value.fromBigInt(value));
   }
 
-  get hourlyTxns(): BigInt | null {
-    let value = this.get("hourlyTxns");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toBigInt();
-    }
+  get currentDayData(): string {
+    let value = this.get("currentDayData");
+    return value!.toString();
   }
 
-  set hourlyTxns(value: BigInt | null) {
-    if (!value) {
-      this.unset("hourlyTxns");
-    } else {
-      this.set("hourlyTxns", Value.fromBigInt(<BigInt>value));
-    }
+  set currentDayData(value: string) {
+    this.set("currentDayData", Value.fromString(value));
+  }
+
+  get currentHourData(): string {
+    let value = this.get("currentHourData");
+    return value!.toString();
+  }
+
+  set currentHourData(value: string) {
+    this.set("currentHourData", Value.fromString(value));
+  }
+
+  get hourlyTxns(): BigInt {
+    let value = this.get("hourlyTxns");
+    return value!.toBigInt();
+  }
+
+  set hourlyTxns(value: BigInt) {
+    this.set("hourlyTxns", Value.fromBigInt(value));
   }
 
   get baseTokenPrice(): BigDecimal | null {

@@ -64,7 +64,9 @@ type Exchange @entity {
   exchangeDayData: [ExchangeDayData!]! @derivedFrom(field: "exchange")
   exchangeHourData: [ExchangeHourData!]! @derivedFrom(field: "exchange")
   dailyTxns: BigInt!
-  hourlyTxns: BigInt
+  currentDayData: ExchangeDayData! @derivedFrom(field: "exchange")
+  currentHourData: ExchangeHourData! @derivedFrom(field: "exchange")
+  hourlyTxns: BigInt!
   baseTokenPrice: BigDecimal
   quoteTokenPrice: BigDecimal
 }

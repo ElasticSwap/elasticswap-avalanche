@@ -150,6 +150,8 @@ export function updateNumberOfTransactions(
 
   exchange!.dailyTxns = exchangeDayData.dailyTxns;
   exchange!.hourlyTxns = exchangeHourData.hourlyTxns;
+  exchange!.currentDayData = exchangeDayData.id;
+  exchange!.currentHourData = exchangeHourData.id;
 
   exchange!.save();
 }
