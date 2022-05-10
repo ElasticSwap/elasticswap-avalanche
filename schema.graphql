@@ -17,6 +17,16 @@ type ExchangeDayData @entity {
   createdAtTimestamp: BigInt!
 }
 
+type ExchangeHourData @entity {
+  id: ID!
+  date: BigInt!
+  baseToken: Token!
+  quoteToken: Token!
+  exchange: Exchange!
+  hourlyTxns: BigInt!
+  createdAtTimestamp: BigInt!
+}
+
 type Exchange @entity {
   id: ID!
   creator: Bytes! # address
@@ -34,15 +44,16 @@ type Exchange @entity {
   baseTokenQty: BigDecimal!
   quoteTokenQty: BigDecimal!
   createdAtTimestamp: BigInt!
-  derivedBaseTokenLiquidity: BigDecimal!
-  derivedQuoteTokenLiquidity: BigDecimal!
   transfers: [Transfer!]! @derivedFrom(field: "exchange")
   swaps: [Swap!]! @derivedFrom(field: "exchange")
-  liquidities: [Liquidity!]! @derivedFrom(field: "exchange")
+  liquiditiesEvents: [LiquidityEvent!]! @derivedFrom(field: "exchange")
   approvals: [Approval!]! @derivedFrom(field: "exchange")
   tokens: [Token!]! @derivedFrom(field: "exchange")
   exchangeDayData: [ExchangeDayData!]! @derivedFrom(field: "exchange")
   dailyTxns: BigInt!
+  hourlyTxns: BigInt
+  baseTokenPrice: BigDecimal
+  quoteTokenPrice: BigDecimal
 }
 
 type Transfer @entity {
@@ -65,7 +76,7 @@ type Swap @entity {
   exchange: Exchange!
 }
 
-type Liquidity @entity {
+type LiquidityEvent @entity {
   id: ID!
   baseTokenQty: BigInt!
   quoteTokenQty: BigInt!

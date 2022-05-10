@@ -83,9 +83,8 @@ export function handleNewExchange(event: NewExchange): void {
   exchange.baseToken = baseToken.id;
   exchange.quoteToken = quoteToken.id;
 
-  exchange.derivedBaseTokenLiquidity = BigDecimal.zero();
-  exchange.derivedQuoteTokenLiquidity = BigDecimal.zero();
   exchange.dailyTxns = BigInt.fromI32(0);
+  exchange.hourlyTxns = BigInt.fromI32(0);
 
   exchange.name = exchangeContract.name();
   exchange.symbol = exchangeContract.symbol();

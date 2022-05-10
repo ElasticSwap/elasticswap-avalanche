@@ -9,62 +9,25 @@ import {
 import {
   Transfer,
   Swap,
-  Liquidity,
+  LiquidityEvent,
   Approval,
   Exchange,
   ExchangeDayData,
 } from "../generated/schema";
-import { updateExchangeTotalSupply } from "./helper";
+import {
+  updateExchangeTotalSupplyAndPrice,
+  updateNumberOfTransactions,
+} from "./helper";
 
 export function handleSwap(event: SwapParams): void {
-  updateExchangeTotalSupply(event.address);
+  updateExchangeTotalSupplyAndPrice(event.address);
   let swap = Swap.load(event.transaction.hash.toHex());
 
   if (!swap) {
     swap = new Swap(event.transaction.hash.toHex());
   }
 
-  let timestamp = event.block.timestamp.toI32();
-  let dayID = timestamp / 86400;
-  let dayStartTimestamp = dayID * 86400;
-  let dayExchangeID = event.address
-    .toHexString()
-    .concat("-")
-    .concat(BigInt.fromI32(dayID).toString());
-  let exchange = Exchange.load(event.address.toHexString());
-
-  let exchangeDayData = ExchangeDayData.load(dayExchangeID);
-
-  if (!exchangeDayData) {
-    exchangeDayData = new ExchangeDayData(dayExchangeID);
-    exchangeDayData.exchange = event.address.toHexString();
-    exchangeDayData.date = BigInt.fromI32(dayStartTimestamp);
-    exchangeDayData.baseToken = exchange!.baseToken;
-    exchangeDayData.quoteToken = exchange!.quoteToken;
-    exchangeDayData.createdAtTimestamp = event.block.timestamp;
-    exchangeDayData.dailyTxns = BigInt.fromI32(0);
-  }
-
-  exchangeDayData.dailyTxns = exchangeDayData.dailyTxns.plus(BigInt.fromI32(1));
-
-  exchangeDayData.save();
-
-  exchange!.dailyTxns = exchangeDayData.dailyTxns;
-
-  exchange!.derivedBaseTokenLiquidity = exchange!.derivedBaseTokenLiquidity.plus(
-    event.params.baseTokenQtyIn.toBigDecimal()
-  );
-  exchange!.derivedBaseTokenLiquidity = exchange!.derivedBaseTokenLiquidity.minus(
-    event.params.baseTokenQtyOut.toBigDecimal()
-  );
-  exchange!.derivedQuoteTokenLiquidity = exchange!.derivedQuoteTokenLiquidity.plus(
-    event.params.quoteTokenQtyIn.toBigDecimal()
-  );
-  exchange!.derivedQuoteTokenLiquidity = exchange!.derivedQuoteTokenLiquidity.minus(
-    event.params.quoteTokenQtyOut.toBigDecimal()
-  );
-
-  exchange!.save();
+  updateNumberOfTransactions(event.address, event.block.timestamp);
 
   swap.baseTokenQtyIn = event.params.baseTokenQtyIn;
   swap.quoteTokenQtyIn = event.params.quoteTokenQtyIn;
@@ -77,7 +40,7 @@ export function handleSwap(event: SwapParams): void {
 }
 
 export function handleTransfer(event: TransferParams): void {
-  updateExchangeTotalSupply(event.address);
+  updateExchangeTotalSupplyAndPrice(event.address);
   let tranfer = Transfer.load(event.transaction.hash.toHex());
 
   if (!tranfer) {
@@ -94,26 +57,14 @@ export function handleTransfer(event: TransferParams): void {
 }
 
 export function handleAddLiquidity(event: AddLiquidityParams): void {
-  updateExchangeTotalSupply(event.address);
-  let addLiquidity = Liquidity.load(event.transaction.hash.toHex());
+  updateExchangeTotalSupplyAndPrice(event.address);
+  let addLiquidity = LiquidityEvent.load(event.transaction.hash.toHex());
 
   if (!addLiquidity) {
-    addLiquidity = new Liquidity(event.transaction.hash.toHex());
+    addLiquidity = new LiquidityEvent(event.transaction.hash.toHex());
   }
 
   addLiquidity.exchange = event.address.toHexString();
-
-  let exchange = Exchange.load(event.address.toHexString());
-
-  exchange!.derivedBaseTokenLiquidity = exchange!.derivedBaseTokenLiquidity.plus(
-    event.params.baseTokenQtyAdded.toBigDecimal()
-  );
-
-  exchange!.derivedQuoteTokenLiquidity = exchange!.derivedQuoteTokenLiquidity.plus(
-    event.params.quoteTokenQtyAdded.toBigDecimal()
-  );
-
-  exchange!.save();
 
   addLiquidity.added = true;
   addLiquidity.baseTokenQty = event.params.baseTokenQtyAdded;
@@ -124,7 +75,7 @@ export function handleAddLiquidity(event: AddLiquidityParams): void {
 }
 
 export function handleApproval(event: ApprovalParams): void {
-  updateExchangeTotalSupply(event.address);
+  updateExchangeTotalSupplyAndPrice(event.address);
   let approval = Approval.load(event.transaction.hash.toHex());
 
   if (!approval) {
@@ -141,26 +92,14 @@ export function handleApproval(event: ApprovalParams): void {
 }
 
 export function handleRemoveLiquidity(event: RemoveLiquidityParams): void {
-  updateExchangeTotalSupply(event.address);
-  let removeLiquidity = Liquidity.load(event.transaction.hash.toHex());
+  updateExchangeTotalSupplyAndPrice(event.address);
+  let removeLiquidity = LiquidityEvent.load(event.transaction.hash.toHex());
 
   if (!removeLiquidity) {
-    removeLiquidity = new Liquidity(event.transaction.hash.toHex());
+    removeLiquidity = new LiquidityEvent(event.transaction.hash.toHex());
   }
 
   removeLiquidity.exchange = event.address.toHexString();
-
-  let exchange = Exchange.load(event.address.toHexString());
-
-  exchange!.derivedBaseTokenLiquidity = exchange!.derivedBaseTokenLiquidity.minus(
-    event.params.baseTokenQtyRemoved.toBigDecimal()
-  );
-
-  exchange!.derivedQuoteTokenLiquidity = exchange!.derivedQuoteTokenLiquidity.minus(
-    event.params.quoteTokenQtyRemoved.toBigDecimal()
-  );
-
-  exchange!.save();
 
   removeLiquidity.added = false;
   removeLiquidity.baseTokenQty = event.params.baseTokenQtyRemoved;
