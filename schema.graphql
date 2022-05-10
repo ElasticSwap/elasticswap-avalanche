@@ -18,8 +18,8 @@ type ExchangeDayData @entity {
   transferTxns: BigInt!
   addLiquidityTxns: BigInt!
   removeLiquidityTxns: BigInt!
-  baseTokenLiquidity: BigDecimal
-  quoteTokenLiquidity: BigDecimal
+  baseTokenLiquidity: BigInt!
+  quoteTokenLiquidity: BigInt!
   createdAtTimestamp: BigInt!
 }
 
@@ -34,8 +34,8 @@ type ExchangeHourData @entity {
   transferTxns: BigInt!
   addLiquidityTxns: BigInt!
   removeLiquidityTxns: BigInt!
-  baseTokenLiquidity: BigDecimal
-  quoteTokenLiquidity: BigDecimal
+  baseTokenLiquidity: BigInt!
+  quoteTokenLiquidity: BigInt!
   createdAtTimestamp: BigInt!
 }
 

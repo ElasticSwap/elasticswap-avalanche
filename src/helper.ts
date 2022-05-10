@@ -131,6 +131,20 @@ export function updateNumberOfTransactions(
     );
   }
 
+  let exchangeContract = ExchangeContract.bind(exchangeAddress);
+
+  let baseTokenBalance = ERC20.bind(exchangeContract.baseToken()).balanceOf(
+    exchangeContract._address
+  );
+  let quoteTokenBalance = ERC20.bind(exchangeContract.quoteToken()).balanceOf(
+    exchangeContract._address
+  );
+
+  exchangeDayData.baseTokenLiquidity = baseTokenBalance;
+  exchangeDayData.quoteTokenLiquidity = quoteTokenBalance;
+  exchangeHourData.baseTokenLiquidity = baseTokenBalance;
+  exchangeHourData.quoteTokenLiquidity = quoteTokenBalance;
+
   exchangeDayData.save();
   exchangeHourData.save();
 

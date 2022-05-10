@@ -108,6 +108,8 @@ export class ExchangeDayData extends Entity {
     this.set("transferTxns", Value.fromBigInt(BigInt.zero()));
     this.set("addLiquidityTxns", Value.fromBigInt(BigInt.zero()));
     this.set("removeLiquidityTxns", Value.fromBigInt(BigInt.zero()));
+    this.set("baseTokenLiquidity", Value.fromBigInt(BigInt.zero()));
+    this.set("quoteTokenLiquidity", Value.fromBigInt(BigInt.zero()));
     this.set("createdAtTimestamp", Value.fromBigInt(BigInt.zero()));
   }
 
@@ -217,38 +219,22 @@ export class ExchangeDayData extends Entity {
     this.set("removeLiquidityTxns", Value.fromBigInt(value));
   }
 
-  get baseTokenLiquidity(): BigDecimal | null {
+  get baseTokenLiquidity(): BigInt {
     let value = this.get("baseTokenLiquidity");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toBigDecimal();
-    }
+    return value!.toBigInt();
   }
 
-  set baseTokenLiquidity(value: BigDecimal | null) {
-    if (!value) {
-      this.unset("baseTokenLiquidity");
-    } else {
-      this.set("baseTokenLiquidity", Value.fromBigDecimal(<BigDecimal>value));
-    }
+  set baseTokenLiquidity(value: BigInt) {
+    this.set("baseTokenLiquidity", Value.fromBigInt(value));
   }
 
-  get quoteTokenLiquidity(): BigDecimal | null {
+  get quoteTokenLiquidity(): BigInt {
     let value = this.get("quoteTokenLiquidity");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toBigDecimal();
-    }
+    return value!.toBigInt();
   }
 
-  set quoteTokenLiquidity(value: BigDecimal | null) {
-    if (!value) {
-      this.unset("quoteTokenLiquidity");
-    } else {
-      this.set("quoteTokenLiquidity", Value.fromBigDecimal(<BigDecimal>value));
-    }
+  set quoteTokenLiquidity(value: BigInt) {
+    this.set("quoteTokenLiquidity", Value.fromBigInt(value));
   }
 
   get createdAtTimestamp(): BigInt {
@@ -275,6 +261,8 @@ export class ExchangeHourData extends Entity {
     this.set("transferTxns", Value.fromBigInt(BigInt.zero()));
     this.set("addLiquidityTxns", Value.fromBigInt(BigInt.zero()));
     this.set("removeLiquidityTxns", Value.fromBigInt(BigInt.zero()));
+    this.set("baseTokenLiquidity", Value.fromBigInt(BigInt.zero()));
+    this.set("quoteTokenLiquidity", Value.fromBigInt(BigInt.zero()));
     this.set("createdAtTimestamp", Value.fromBigInt(BigInt.zero()));
   }
 
@@ -386,38 +374,22 @@ export class ExchangeHourData extends Entity {
     this.set("removeLiquidityTxns", Value.fromBigInt(value));
   }
 
-  get baseTokenLiquidity(): BigDecimal | null {
+  get baseTokenLiquidity(): BigInt {
     let value = this.get("baseTokenLiquidity");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toBigDecimal();
-    }
+    return value!.toBigInt();
   }
 
-  set baseTokenLiquidity(value: BigDecimal | null) {
-    if (!value) {
-      this.unset("baseTokenLiquidity");
-    } else {
-      this.set("baseTokenLiquidity", Value.fromBigDecimal(<BigDecimal>value));
-    }
+  set baseTokenLiquidity(value: BigInt) {
+    this.set("baseTokenLiquidity", Value.fromBigInt(value));
   }
 
-  get quoteTokenLiquidity(): BigDecimal | null {
+  get quoteTokenLiquidity(): BigInt {
     let value = this.get("quoteTokenLiquidity");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toBigDecimal();
-    }
+    return value!.toBigInt();
   }
 
-  set quoteTokenLiquidity(value: BigDecimal | null) {
-    if (!value) {
-      this.unset("quoteTokenLiquidity");
-    } else {
-      this.set("quoteTokenLiquidity", Value.fromBigDecimal(<BigDecimal>value));
-    }
+  set quoteTokenLiquidity(value: BigInt) {
+    this.set("quoteTokenLiquidity", Value.fromBigInt(value));
   }
 
   get createdAtTimestamp(): BigInt {
