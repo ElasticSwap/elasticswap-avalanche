@@ -50,6 +50,7 @@ type Exchange @entity {
   approvals: [Approval!]! @derivedFrom(field: "exchange")
   tokens: [Token!]! @derivedFrom(field: "exchange")
   exchangeDayData: [ExchangeDayData!]! @derivedFrom(field: "exchange")
+  exchangeHourData: [ExchangeHourData!]! @derivedFrom(field: "exchange")
   dailyTxns: BigInt!
   hourlyTxns: BigInt
   baseTokenPrice: BigDecimal

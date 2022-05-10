@@ -519,6 +519,15 @@ export class Exchange extends Entity {
     this.set("exchangeDayData", Value.fromStringArray(value));
   }
 
+  get exchangeHourData(): Array<string> {
+    let value = this.get("exchangeHourData");
+    return value!.toStringArray();
+  }
+
+  set exchangeHourData(value: Array<string>) {
+    this.set("exchangeHourData", Value.fromStringArray(value));
+  }
+
   get dailyTxns(): BigInt {
     let value = this.get("dailyTxns");
     return value!.toBigInt();
