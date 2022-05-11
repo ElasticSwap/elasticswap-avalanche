@@ -423,6 +423,8 @@ export class Exchange extends Entity {
     this.set("quoteTokenQty", Value.fromBigDecimal(BigDecimal.zero()));
     this.set("createdAtTimestamp", Value.fromBigInt(BigInt.zero()));
     this.set("dailyTxns", Value.fromBigInt(BigInt.zero()));
+    this.set("currentDayData", Value.fromString(""));
+    this.set("currentHourData", Value.fromString(""));
     this.set("hourlyTxns", Value.fromBigInt(BigInt.zero()));
   }
 
