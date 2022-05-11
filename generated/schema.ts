@@ -19,8 +19,8 @@ export class Token extends Entity {
     this.set("symbol", Value.fromString(""));
     this.set("name", Value.fromString(""));
     this.set("decimals", Value.fromBigDecimal(BigDecimal.zero()));
-    this.set("totalSupply", Value.fromBigInt(BigInt.zero()));
-    this.set("exchangeFactoryAddress", Value.fromBytes(Bytes.empty()));
+    this.set("totalSupply", Value.fromBigDecimal(BigDecimal.zero()));
+    this.set("exchange", Value.fromString(""));
   }
 
   save(): void {
@@ -75,22 +75,330 @@ export class Token extends Entity {
     this.set("decimals", Value.fromBigDecimal(value));
   }
 
-  get totalSupply(): BigInt {
+  get totalSupply(): BigDecimal {
     let value = this.get("totalSupply");
+    return value!.toBigDecimal();
+  }
+
+  set totalSupply(value: BigDecimal) {
+    this.set("totalSupply", Value.fromBigDecimal(value));
+  }
+
+  get exchange(): string {
+    let value = this.get("exchange");
+    return value!.toString();
+  }
+
+  set exchange(value: string) {
+    this.set("exchange", Value.fromString(value));
+  }
+}
+
+export class ExchangeDayData extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+
+    this.set("date", Value.fromBigInt(BigInt.zero()));
+    this.set("baseToken", Value.fromString(""));
+    this.set("quoteToken", Value.fromString(""));
+    this.set("exchange", Value.fromString(""));
+    this.set("dailyTxns", Value.fromBigInt(BigInt.zero()));
+    this.set("swapTxns", Value.fromBigInt(BigInt.zero()));
+    this.set("transferTxns", Value.fromBigInt(BigInt.zero()));
+    this.set("addLiquidityTxns", Value.fromBigInt(BigInt.zero()));
+    this.set("removeLiquidityTxns", Value.fromBigInt(BigInt.zero()));
+    this.set("baseTokenLiquidity", Value.fromBigInt(BigInt.zero()));
+    this.set("quoteTokenLiquidity", Value.fromBigInt(BigInt.zero()));
+    this.set("createdAtTimestamp", Value.fromBigInt(BigInt.zero()));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save ExchangeDayData entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type ExchangeDayData must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("ExchangeDayData", id.toString(), this);
+    }
+  }
+
+  static load(id: string): ExchangeDayData | null {
+    return changetype<ExchangeDayData | null>(store.get("ExchangeDayData", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get date(): BigInt {
+    let value = this.get("date");
     return value!.toBigInt();
   }
 
-  set totalSupply(value: BigInt) {
-    this.set("totalSupply", Value.fromBigInt(value));
+  set date(value: BigInt) {
+    this.set("date", Value.fromBigInt(value));
   }
 
-  get exchangeFactoryAddress(): Bytes {
-    let value = this.get("exchangeFactoryAddress");
-    return value!.toBytes();
+  get baseToken(): string {
+    let value = this.get("baseToken");
+    return value!.toString();
   }
 
-  set exchangeFactoryAddress(value: Bytes) {
-    this.set("exchangeFactoryAddress", Value.fromBytes(value));
+  set baseToken(value: string) {
+    this.set("baseToken", Value.fromString(value));
+  }
+
+  get quoteToken(): string {
+    let value = this.get("quoteToken");
+    return value!.toString();
+  }
+
+  set quoteToken(value: string) {
+    this.set("quoteToken", Value.fromString(value));
+  }
+
+  get exchange(): string {
+    let value = this.get("exchange");
+    return value!.toString();
+  }
+
+  set exchange(value: string) {
+    this.set("exchange", Value.fromString(value));
+  }
+
+  get dailyTxns(): BigInt {
+    let value = this.get("dailyTxns");
+    return value!.toBigInt();
+  }
+
+  set dailyTxns(value: BigInt) {
+    this.set("dailyTxns", Value.fromBigInt(value));
+  }
+
+  get swapTxns(): BigInt {
+    let value = this.get("swapTxns");
+    return value!.toBigInt();
+  }
+
+  set swapTxns(value: BigInt) {
+    this.set("swapTxns", Value.fromBigInt(value));
+  }
+
+  get transferTxns(): BigInt {
+    let value = this.get("transferTxns");
+    return value!.toBigInt();
+  }
+
+  set transferTxns(value: BigInt) {
+    this.set("transferTxns", Value.fromBigInt(value));
+  }
+
+  get addLiquidityTxns(): BigInt {
+    let value = this.get("addLiquidityTxns");
+    return value!.toBigInt();
+  }
+
+  set addLiquidityTxns(value: BigInt) {
+    this.set("addLiquidityTxns", Value.fromBigInt(value));
+  }
+
+  get removeLiquidityTxns(): BigInt {
+    let value = this.get("removeLiquidityTxns");
+    return value!.toBigInt();
+  }
+
+  set removeLiquidityTxns(value: BigInt) {
+    this.set("removeLiquidityTxns", Value.fromBigInt(value));
+  }
+
+  get baseTokenLiquidity(): BigInt {
+    let value = this.get("baseTokenLiquidity");
+    return value!.toBigInt();
+  }
+
+  set baseTokenLiquidity(value: BigInt) {
+    this.set("baseTokenLiquidity", Value.fromBigInt(value));
+  }
+
+  get quoteTokenLiquidity(): BigInt {
+    let value = this.get("quoteTokenLiquidity");
+    return value!.toBigInt();
+  }
+
+  set quoteTokenLiquidity(value: BigInt) {
+    this.set("quoteTokenLiquidity", Value.fromBigInt(value));
+  }
+
+  get createdAtTimestamp(): BigInt {
+    let value = this.get("createdAtTimestamp");
+    return value!.toBigInt();
+  }
+
+  set createdAtTimestamp(value: BigInt) {
+    this.set("createdAtTimestamp", Value.fromBigInt(value));
+  }
+}
+
+export class ExchangeHourData extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+
+    this.set("date", Value.fromBigInt(BigInt.zero()));
+    this.set("baseToken", Value.fromString(""));
+    this.set("quoteToken", Value.fromString(""));
+    this.set("exchange", Value.fromString(""));
+    this.set("hourlyTxns", Value.fromBigInt(BigInt.zero()));
+    this.set("swapTxns", Value.fromBigInt(BigInt.zero()));
+    this.set("transferTxns", Value.fromBigInt(BigInt.zero()));
+    this.set("addLiquidityTxns", Value.fromBigInt(BigInt.zero()));
+    this.set("removeLiquidityTxns", Value.fromBigInt(BigInt.zero()));
+    this.set("baseTokenLiquidity", Value.fromBigInt(BigInt.zero()));
+    this.set("quoteTokenLiquidity", Value.fromBigInt(BigInt.zero()));
+    this.set("createdAtTimestamp", Value.fromBigInt(BigInt.zero()));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save ExchangeHourData entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type ExchangeHourData must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("ExchangeHourData", id.toString(), this);
+    }
+  }
+
+  static load(id: string): ExchangeHourData | null {
+    return changetype<ExchangeHourData | null>(
+      store.get("ExchangeHourData", id)
+    );
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get date(): BigInt {
+    let value = this.get("date");
+    return value!.toBigInt();
+  }
+
+  set date(value: BigInt) {
+    this.set("date", Value.fromBigInt(value));
+  }
+
+  get baseToken(): string {
+    let value = this.get("baseToken");
+    return value!.toString();
+  }
+
+  set baseToken(value: string) {
+    this.set("baseToken", Value.fromString(value));
+  }
+
+  get quoteToken(): string {
+    let value = this.get("quoteToken");
+    return value!.toString();
+  }
+
+  set quoteToken(value: string) {
+    this.set("quoteToken", Value.fromString(value));
+  }
+
+  get exchange(): string {
+    let value = this.get("exchange");
+    return value!.toString();
+  }
+
+  set exchange(value: string) {
+    this.set("exchange", Value.fromString(value));
+  }
+
+  get hourlyTxns(): BigInt {
+    let value = this.get("hourlyTxns");
+    return value!.toBigInt();
+  }
+
+  set hourlyTxns(value: BigInt) {
+    this.set("hourlyTxns", Value.fromBigInt(value));
+  }
+
+  get swapTxns(): BigInt {
+    let value = this.get("swapTxns");
+    return value!.toBigInt();
+  }
+
+  set swapTxns(value: BigInt) {
+    this.set("swapTxns", Value.fromBigInt(value));
+  }
+
+  get transferTxns(): BigInt {
+    let value = this.get("transferTxns");
+    return value!.toBigInt();
+  }
+
+  set transferTxns(value: BigInt) {
+    this.set("transferTxns", Value.fromBigInt(value));
+  }
+
+  get addLiquidityTxns(): BigInt {
+    let value = this.get("addLiquidityTxns");
+    return value!.toBigInt();
+  }
+
+  set addLiquidityTxns(value: BigInt) {
+    this.set("addLiquidityTxns", Value.fromBigInt(value));
+  }
+
+  get removeLiquidityTxns(): BigInt {
+    let value = this.get("removeLiquidityTxns");
+    return value!.toBigInt();
+  }
+
+  set removeLiquidityTxns(value: BigInt) {
+    this.set("removeLiquidityTxns", Value.fromBigInt(value));
+  }
+
+  get baseTokenLiquidity(): BigInt {
+    let value = this.get("baseTokenLiquidity");
+    return value!.toBigInt();
+  }
+
+  set baseTokenLiquidity(value: BigInt) {
+    this.set("baseTokenLiquidity", Value.fromBigInt(value));
+  }
+
+  get quoteTokenLiquidity(): BigInt {
+    let value = this.get("quoteTokenLiquidity");
+    return value!.toBigInt();
+  }
+
+  set quoteTokenLiquidity(value: BigInt) {
+    this.set("quoteTokenLiquidity", Value.fromBigInt(value));
+  }
+
+  get createdAtTimestamp(): BigInt {
+    let value = this.get("createdAtTimestamp");
+    return value!.toBigInt();
+  }
+
+  set createdAtTimestamp(value: BigInt) {
+    this.set("createdAtTimestamp", Value.fromBigInt(value));
   }
 }
 
@@ -101,6 +409,9 @@ export class Exchange extends Entity {
 
     this.set("creator", Value.fromBytes(Bytes.empty()));
     this.set("exchangeAddress", Value.fromBytes(Bytes.empty()));
+    this.set("name", Value.fromString(""));
+    this.set("symbol", Value.fromString(""));
+    this.set("decimals", Value.fromBigDecimal(BigDecimal.zero()));
     this.set("baseToken", Value.fromString(""));
     this.set("quoteToken", Value.fromString(""));
     this.set("minimumLiquidity", Value.fromBigInt(BigInt.zero()));
@@ -108,6 +419,13 @@ export class Exchange extends Entity {
     this.set("baseTokenReserveQty", Value.fromBigInt(BigInt.zero()));
     this.set("quoteTokenReserveQty", Value.fromBigInt(BigInt.zero()));
     this.set("kLast", Value.fromBigInt(BigInt.zero()));
+    this.set("baseTokenQty", Value.fromBigDecimal(BigDecimal.zero()));
+    this.set("quoteTokenQty", Value.fromBigDecimal(BigDecimal.zero()));
+    this.set("createdAtTimestamp", Value.fromBigInt(BigInt.zero()));
+    this.set("dailyTxns", Value.fromBigInt(BigInt.zero()));
+    this.set("currentDayData", Value.fromString(""));
+    this.set("currentHourData", Value.fromString(""));
+    this.set("hourlyTxns", Value.fromBigInt(BigInt.zero()));
   }
 
   save(): void {
@@ -151,6 +469,33 @@ export class Exchange extends Entity {
 
   set exchangeAddress(value: Bytes) {
     this.set("exchangeAddress", Value.fromBytes(value));
+  }
+
+  get name(): string {
+    let value = this.get("name");
+    return value!.toString();
+  }
+
+  set name(value: string) {
+    this.set("name", Value.fromString(value));
+  }
+
+  get symbol(): string {
+    let value = this.get("symbol");
+    return value!.toString();
+  }
+
+  set symbol(value: string) {
+    this.set("symbol", Value.fromString(value));
+  }
+
+  get decimals(): BigDecimal {
+    let value = this.get("decimals");
+    return value!.toBigDecimal();
+  }
+
+  set decimals(value: BigDecimal) {
+    this.set("decimals", Value.fromBigDecimal(value));
   }
 
   get baseToken(): string {
@@ -215,6 +560,166 @@ export class Exchange extends Entity {
   set kLast(value: BigInt) {
     this.set("kLast", Value.fromBigInt(value));
   }
+
+  get baseTokenQty(): BigDecimal {
+    let value = this.get("baseTokenQty");
+    return value!.toBigDecimal();
+  }
+
+  set baseTokenQty(value: BigDecimal) {
+    this.set("baseTokenQty", Value.fromBigDecimal(value));
+  }
+
+  get quoteTokenQty(): BigDecimal {
+    let value = this.get("quoteTokenQty");
+    return value!.toBigDecimal();
+  }
+
+  set quoteTokenQty(value: BigDecimal) {
+    this.set("quoteTokenQty", Value.fromBigDecimal(value));
+  }
+
+  get createdAtTimestamp(): BigInt {
+    let value = this.get("createdAtTimestamp");
+    return value!.toBigInt();
+  }
+
+  set createdAtTimestamp(value: BigInt) {
+    this.set("createdAtTimestamp", Value.fromBigInt(value));
+  }
+
+  get transfers(): Array<string> {
+    let value = this.get("transfers");
+    return value!.toStringArray();
+  }
+
+  set transfers(value: Array<string>) {
+    this.set("transfers", Value.fromStringArray(value));
+  }
+
+  get swaps(): Array<string> {
+    let value = this.get("swaps");
+    return value!.toStringArray();
+  }
+
+  set swaps(value: Array<string>) {
+    this.set("swaps", Value.fromStringArray(value));
+  }
+
+  get liquiditiesEvents(): Array<string> {
+    let value = this.get("liquiditiesEvents");
+    return value!.toStringArray();
+  }
+
+  set liquiditiesEvents(value: Array<string>) {
+    this.set("liquiditiesEvents", Value.fromStringArray(value));
+  }
+
+  get approvals(): Array<string> {
+    let value = this.get("approvals");
+    return value!.toStringArray();
+  }
+
+  set approvals(value: Array<string>) {
+    this.set("approvals", Value.fromStringArray(value));
+  }
+
+  get tokens(): Array<string> {
+    let value = this.get("tokens");
+    return value!.toStringArray();
+  }
+
+  set tokens(value: Array<string>) {
+    this.set("tokens", Value.fromStringArray(value));
+  }
+
+  get exchangeDayData(): Array<string> {
+    let value = this.get("exchangeDayData");
+    return value!.toStringArray();
+  }
+
+  set exchangeDayData(value: Array<string>) {
+    this.set("exchangeDayData", Value.fromStringArray(value));
+  }
+
+  get exchangeHourData(): Array<string> {
+    let value = this.get("exchangeHourData");
+    return value!.toStringArray();
+  }
+
+  set exchangeHourData(value: Array<string>) {
+    this.set("exchangeHourData", Value.fromStringArray(value));
+  }
+
+  get dailyTxns(): BigInt {
+    let value = this.get("dailyTxns");
+    return value!.toBigInt();
+  }
+
+  set dailyTxns(value: BigInt) {
+    this.set("dailyTxns", Value.fromBigInt(value));
+  }
+
+  get currentDayData(): string {
+    let value = this.get("currentDayData");
+    return value!.toString();
+  }
+
+  set currentDayData(value: string) {
+    this.set("currentDayData", Value.fromString(value));
+  }
+
+  get currentHourData(): string {
+    let value = this.get("currentHourData");
+    return value!.toString();
+  }
+
+  set currentHourData(value: string) {
+    this.set("currentHourData", Value.fromString(value));
+  }
+
+  get hourlyTxns(): BigInt {
+    let value = this.get("hourlyTxns");
+    return value!.toBigInt();
+  }
+
+  set hourlyTxns(value: BigInt) {
+    this.set("hourlyTxns", Value.fromBigInt(value));
+  }
+
+  get baseTokenPrice(): BigDecimal | null {
+    let value = this.get("baseTokenPrice");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigDecimal();
+    }
+  }
+
+  set baseTokenPrice(value: BigDecimal | null) {
+    if (!value) {
+      this.unset("baseTokenPrice");
+    } else {
+      this.set("baseTokenPrice", Value.fromBigDecimal(<BigDecimal>value));
+    }
+  }
+
+  get quoteTokenPrice(): BigDecimal | null {
+    let value = this.get("quoteTokenPrice");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigDecimal();
+    }
+  }
+
+  set quoteTokenPrice(value: BigDecimal | null) {
+    if (!value) {
+      this.unset("quoteTokenPrice");
+    } else {
+      this.set("quoteTokenPrice", Value.fromBigDecimal(<BigDecimal>value));
+    }
+  }
 }
 
 export class Transfer extends Entity {
@@ -224,6 +729,8 @@ export class Transfer extends Entity {
 
     this.set("from", Value.fromBytes(Bytes.empty()));
     this.set("value", Value.fromBigInt(BigInt.zero()));
+    this.set("createdAtTimestamp", Value.fromBigInt(BigInt.zero()));
+    this.set("exchange", Value.fromString(""));
   }
 
   save(): void {
@@ -285,6 +792,24 @@ export class Transfer extends Entity {
   set value(value: BigInt) {
     this.set("value", Value.fromBigInt(value));
   }
+
+  get createdAtTimestamp(): BigInt {
+    let value = this.get("createdAtTimestamp");
+    return value!.toBigInt();
+  }
+
+  set createdAtTimestamp(value: BigInt) {
+    this.set("createdAtTimestamp", Value.fromBigInt(value));
+  }
+
+  get exchange(): string {
+    let value = this.get("exchange");
+    return value!.toString();
+  }
+
+  set exchange(value: string) {
+    this.set("exchange", Value.fromString(value));
+  }
 }
 
 export class Swap extends Entity {
@@ -297,6 +822,8 @@ export class Swap extends Entity {
     this.set("quoteTokenQtyIn", Value.fromBigInt(BigInt.zero()));
     this.set("quoteTokenQtyOut", Value.fromBigInt(BigInt.zero()));
     this.set("sender", Value.fromBytes(Bytes.empty()));
+    this.set("createdAtTimestamp", Value.fromBigInt(BigInt.zero()));
+    this.set("exchange", Value.fromString(""));
   }
 
   save(): void {
@@ -367,5 +894,199 @@ export class Swap extends Entity {
 
   set sender(value: Bytes) {
     this.set("sender", Value.fromBytes(value));
+  }
+
+  get createdAtTimestamp(): BigInt {
+    let value = this.get("createdAtTimestamp");
+    return value!.toBigInt();
+  }
+
+  set createdAtTimestamp(value: BigInt) {
+    this.set("createdAtTimestamp", Value.fromBigInt(value));
+  }
+
+  get exchange(): string {
+    let value = this.get("exchange");
+    return value!.toString();
+  }
+
+  set exchange(value: string) {
+    this.set("exchange", Value.fromString(value));
+  }
+}
+
+export class LiquidityEvent extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+
+    this.set("baseTokenQty", Value.fromBigInt(BigInt.zero()));
+    this.set("quoteTokenQty", Value.fromBigInt(BigInt.zero()));
+    this.set("liquidityProvider", Value.fromBytes(Bytes.empty()));
+    this.set("added", Value.fromBoolean(false));
+    this.set("createdAtTimestamp", Value.fromBigInt(BigInt.zero()));
+    this.set("exchange", Value.fromString(""));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save LiquidityEvent entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type LiquidityEvent must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("LiquidityEvent", id.toString(), this);
+    }
+  }
+
+  static load(id: string): LiquidityEvent | null {
+    return changetype<LiquidityEvent | null>(store.get("LiquidityEvent", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get baseTokenQty(): BigInt {
+    let value = this.get("baseTokenQty");
+    return value!.toBigInt();
+  }
+
+  set baseTokenQty(value: BigInt) {
+    this.set("baseTokenQty", Value.fromBigInt(value));
+  }
+
+  get quoteTokenQty(): BigInt {
+    let value = this.get("quoteTokenQty");
+    return value!.toBigInt();
+  }
+
+  set quoteTokenQty(value: BigInt) {
+    this.set("quoteTokenQty", Value.fromBigInt(value));
+  }
+
+  get liquidityProvider(): Bytes {
+    let value = this.get("liquidityProvider");
+    return value!.toBytes();
+  }
+
+  set liquidityProvider(value: Bytes) {
+    this.set("liquidityProvider", Value.fromBytes(value));
+  }
+
+  get added(): boolean {
+    let value = this.get("added");
+    return value!.toBoolean();
+  }
+
+  set added(value: boolean) {
+    this.set("added", Value.fromBoolean(value));
+  }
+
+  get createdAtTimestamp(): BigInt {
+    let value = this.get("createdAtTimestamp");
+    return value!.toBigInt();
+  }
+
+  set createdAtTimestamp(value: BigInt) {
+    this.set("createdAtTimestamp", Value.fromBigInt(value));
+  }
+
+  get exchange(): string {
+    let value = this.get("exchange");
+    return value!.toString();
+  }
+
+  set exchange(value: string) {
+    this.set("exchange", Value.fromString(value));
+  }
+}
+
+export class Approval extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+
+    this.set("owner", Value.fromBytes(Bytes.empty()));
+    this.set("spender", Value.fromBytes(Bytes.empty()));
+    this.set("value", Value.fromBigInt(BigInt.zero()));
+    this.set("createdAtTimestamp", Value.fromBigInt(BigInt.zero()));
+    this.set("exchange", Value.fromString(""));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save Approval entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type Approval must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("Approval", id.toString(), this);
+    }
+  }
+
+  static load(id: string): Approval | null {
+    return changetype<Approval | null>(store.get("Approval", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get owner(): Bytes {
+    let value = this.get("owner");
+    return value!.toBytes();
+  }
+
+  set owner(value: Bytes) {
+    this.set("owner", Value.fromBytes(value));
+  }
+
+  get spender(): Bytes {
+    let value = this.get("spender");
+    return value!.toBytes();
+  }
+
+  set spender(value: Bytes) {
+    this.set("spender", Value.fromBytes(value));
+  }
+
+  get value(): BigInt {
+    let value = this.get("value");
+    return value!.toBigInt();
+  }
+
+  set value(value: BigInt) {
+    this.set("value", Value.fromBigInt(value));
+  }
+
+  get createdAtTimestamp(): BigInt {
+    let value = this.get("createdAtTimestamp");
+    return value!.toBigInt();
+  }
+
+  set createdAtTimestamp(value: BigInt) {
+    this.set("createdAtTimestamp", Value.fromBigInt(value));
+  }
+
+  get exchange(): string {
+    let value = this.get("exchange");
+    return value!.toString();
+  }
+
+  set exchange(value: string) {
+    this.set("exchange", Value.fromString(value));
   }
 }

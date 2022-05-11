@@ -3,14 +3,49 @@ type Token @entity {
   symbol: String!
   name: String!
   decimals: BigDecimal!
-  totalSupply: BigInt!
-  exchangeFactoryAddress: Bytes!
+  totalSupply: BigDecimal!
+  exchange: Exchange!
+}
+
+type ExchangeDayData @entity {
+  id: ID!
+  date: BigInt!
+  baseToken: Token!
+  quoteToken: Token!
+  exchange: Exchange!
+  dailyTxns: BigInt!
+  swapTxns: BigInt!
+  transferTxns: BigInt!
+  addLiquidityTxns: BigInt!
+  removeLiquidityTxns: BigInt!
+  baseTokenLiquidity: BigInt!
+  quoteTokenLiquidity: BigInt!
+  createdAtTimestamp: BigInt!
+}
+
+type ExchangeHourData @entity {
+  id: ID!
+  date: BigInt!
+  baseToken: Token!
+  quoteToken: Token!
+  exchange: Exchange!
+  hourlyTxns: BigInt!
+  swapTxns: BigInt!
+  transferTxns: BigInt!
+  addLiquidityTxns: BigInt!
+  removeLiquidityTxns: BigInt!
+  baseTokenLiquidity: BigInt!
+  quoteTokenLiquidity: BigInt!
+  createdAtTimestamp: BigInt!
 }
 
 type Exchange @entity {
   id: ID!
   creator: Bytes! # address
   exchangeAddress: Bytes! # address
+  name: String!
+  symbol: String!
+  decimals: BigDecimal!
   baseToken: Token!
   quoteToken: Token!
   minimumLiquidity: BigInt!
@@ -18,6 +53,22 @@ type Exchange @entity {
   baseTokenReserveQty: BigInt!
   quoteTokenReserveQty: BigInt!
   kLast: BigInt!
+  baseTokenQty: BigDecimal!
+  quoteTokenQty: BigDecimal!
+  createdAtTimestamp: BigInt!
+  transfers: [Transfer!]! @derivedFrom(field: "exchange")
+  swaps: [Swap!]! @derivedFrom(field: "exchange")
+  liquiditiesEvents: [LiquidityEvent!]! @derivedFrom(field: "exchange")
+  approvals: [Approval!]! @derivedFrom(field: "exchange")
+  tokens: [Token!]! @derivedFrom(field: "exchange")
+  exchangeDayData: [ExchangeDayData!]! @derivedFrom(field: "exchange")
+  exchangeHourData: [ExchangeHourData!]! @derivedFrom(field: "exchange")
+  dailyTxns: BigInt!
+  currentDayData: ExchangeDayData!
+  currentHourData: ExchangeHourData!
+  hourlyTxns: BigInt!
+  baseTokenPrice: BigDecimal
+  quoteTokenPrice: BigDecimal
 }
 
 type Transfer @entity {
@@ -25,6 +76,8 @@ type Transfer @entity {
   from: Bytes! # address
   to: Bytes # address
   value: BigInt!
+  createdAtTimestamp: BigInt!
+  exchange: Exchange!
 }
 
 type Swap @entity {
@@ -34,4 +87,25 @@ type Swap @entity {
   quoteTokenQtyIn: BigInt!
   quoteTokenQtyOut: BigInt!
   sender: Bytes!
+  createdAtTimestamp: BigInt!
+  exchange: Exchange!
+}
+
+type LiquidityEvent @entity {
+  id: ID!
+  baseTokenQty: BigInt!
+  quoteTokenQty: BigInt!
+  liquidityProvider: Bytes! # address
+  added: Boolean!
+  createdAtTimestamp: BigInt!
+  exchange: Exchange!
+}
+
+type Approval @entity {
+  id: ID!
+  owner: Bytes!
+  spender: Bytes!
+  value: BigInt!
+  createdAtTimestamp: BigInt!
+  exchange: Exchange!
 }
