@@ -1,111 +1,210 @@
+# Token Entity - This Defines a Token
 type Token @entity {
+  # The ID of the Token
   id: ID!
+  # The Symbol of the Token
   symbol: String!
+  # The Name of the Token
   name: String!
+  # The decimals of the Token
   decimals: BigDecimal!
+  # The Total Token Supply -
+  # This is updated to the last transaction block that the graph indexed
   totalSupply: BigDecimal!
+  # The Exchange the Token is a part of
   exchange: Exchange!
 }
 
+# Daily Transaction Data for the Exchange
+# This is filtered and only contains the amount of transactions per day.
 type ExchangeDayData @entity {
+  # A Unique ID to identity the Transactions Day
   id: ID!
+  # The Date of the Transactions
   date: BigInt!
+  # The Base Token of the transactions
   baseToken: Token!
+  # The Quote Token of the transactions
   quoteToken: Token!
+  # The Exchange the Daily Data belongs to
   exchange: Exchange!
+  # Total Number of Daily Transactions
   dailyTxns: BigInt!
+  # Total Number of Daily Swaps
   swapTxns: BigInt!
+  # Total Number of Daily Transfers
   transferTxns: BigInt!
+  # Total Number of times the Liquidity was Added (Daily)
   addLiquidityTxns: BigInt!
+  # Total Number of times the Liquidity was Removed (Daily)
   removeLiquidityTxns: BigInt!
+  # Total Base Token Liquidity
   baseTokenLiquidity: BigInt!
+  # Total Quote Token Liquidity
   quoteTokenLiquidity: BigInt!
+  # When was this daily tranaction Block Created
   createdAtTimestamp: BigInt!
 }
 
+# Hourly Transaction Data for the Exchange
+# This is filtered and only contains the amount of transactions per hour.
 type ExchangeHourData @entity {
+  # A Unique ID to identity the Transactions Day
   id: ID!
+  # The Date of the Transactions (As a timestamp)
   date: BigInt!
+  # The Base Token of the transactions
   baseToken: Token!
+  # The Quote Token of the transactions
   quoteToken: Token!
+  # The Exchange the Hourly Data belongs to
   exchange: Exchange!
+  # Total Number of Hourly Transactions
   hourlyTxns: BigInt!
+  # Total Number of Hourly Swaps
   swapTxns: BigInt!
+  # Total Number of Hourly Transfers
   transferTxns: BigInt!
+  # Total Number of times the Liquidity was Added (Hourly)
   addLiquidityTxns: BigInt!
+  # Total Number of times the Liquidity was Removed (Hourly)
   removeLiquidityTxns: BigInt!
+  # Total Base Token Liquidity
   baseTokenLiquidity: BigInt!
+  # Total Quote Token Liquidity
   quoteTokenLiquidity: BigInt!
+  # When was this hourly tranaction Block Created
   createdAtTimestamp: BigInt!
 }
 
+# The Entity of Exchange
 type Exchange @entity {
+  # Uniquie ID of the Exchange
   id: ID!
+  # Who was this Exchange created by
   creator: Bytes! # address
+  # What Exchange Address of this Exchange
   exchangeAddress: Bytes! # address
+  # The Name of the Exchange
   name: String!
+  # The Symbol of the Exchange
   symbol: String!
+  # The decimals of the Exchange
   decimals: BigDecimal!
+  # The Base Token of the Exchange
   baseToken: Token!
+  # The Quote Token of the Exchange
   quoteToken: Token!
+  # The minimum Liquidity of the Exchange
   minimumLiquidity: BigInt!
+  # The total Supply of the Exchange
+  # (updated to the last transactional block the graph ran on)
   totalSupply: BigInt!
+  # The total Base Token Supply of the Exchange
   baseTokenReserveQty: BigInt!
+  # The total Quote Token Supply of the Exchange
   quoteTokenReserveQty: BigInt!
   kLast: BigInt!
+  # The total Base Token Supply of the Exchange
   baseTokenQty: BigDecimal!
+  # The total Quote Token Supply of the Exchange
   quoteTokenQty: BigDecimal!
+  # When was this Exchange created
   createdAtTimestamp: BigInt!
+  # All the transfer events that happened on the exchange
   transfers: [Transfer!] @derivedFrom(field: "exchange")
+  # All the swaps events that happened on the exchange
   swaps: [Swap!] @derivedFrom(field: "exchange")
+  # All the addLiquidity events that happened on the exchange
   liquiditiesEvents: [LiquidityEvent!] @derivedFrom(field: "exchange")
+  # All the approval events that happened on the exchange
   approvals: [Approval!] @derivedFrom(field: "exchange")
+  # The coresponding Tokens for this Exchange
   tokens: [Token!]! @derivedFrom(field: "exchange")
+  # All the daily transactions for this Exchange
   exchangeDayData: [ExchangeDayData!] @derivedFrom(field: "exchange")
+  # All the hourly transactions for this Exchange
   exchangeHourData: [ExchangeHourData!] @derivedFrom(field: "exchange")
+  # Total Daily Transactions (current Day)
   dailyTxns: BigInt!
+  # Current Daily Transaction Data Record
   currentDayData: ExchangeDayData
+  # Current Hourly Transaction Data Record
   currentHourData: ExchangeHourData
+  # Total Hourly Transactions (current Hour)
   hourlyTxns: BigInt!
+  # Exchange Base Token Price
   baseTokenPrice: BigDecimal
+  # Exchange Quote Token Price
   quoteTokenPrice: BigDecimal
 }
 
+# The transfer event entity
 type Transfer @entity {
+  # The Unique ID of the Transfer Event
   id: ID!
+  # Where is the Transfer event originating
   from: Bytes! # address
+  # Where is the Transfer event settling
   to: Bytes # address
+  # Total Value of the transfer
   value: BigInt!
+  # When did the transfer event happened
   createdAtTimestamp: BigInt!
+  # The Exchange the transfer event belong to
   exchange: Exchange!
 }
 
+# The Swap Event Entity
 type Swap @entity {
+  # The Unique ID of the Swap Event
   id: ID!
+  # The Amount of Base tokens Flowing Into the exchange
   baseTokenQtyIn: BigInt!
+  # The Amount of Base tokens Flowing Out of the exchange
   baseTokenQtyOut: BigInt!
+  # The Amount of Quote tokens Flowing Into the exchange
   quoteTokenQtyIn: BigInt!
+  # The Amount of Quote tokens Flowing Out of the exchange
   quoteTokenQtyOut: BigInt!
+  # Who initiated the swap event
   sender: Bytes!
+  # When did the swap event happened
   createdAtTimestamp: BigInt!
+  # The Exchange the swap event belong to
   exchange: Exchange!
 }
 
+# The Liquidity Event Entity
 type LiquidityEvent @entity {
+  # The Unique ID of the Liquidity Event
   id: ID!
+  # The Amount of Base Tokens Liquidity Added
   baseTokenQty: BigInt!
+  # The Amount of Quote Tokens Liquidity Added
   quoteTokenQty: BigInt!
+  # Who Added/Removed the Liquidity
   liquidityProvider: Bytes! # address
+  # Was the Liquidity Added (if not, it was removed)
   added: Boolean!
+  # When did the liquidity event happened
   createdAtTimestamp: BigInt!
+  # The Exchange the liquidity event belong to
   exchange: Exchange!
 }
 
+# The Approval Event Entity
 type Approval @entity {
+  # The Unique ID of the Approval Event
   id: ID!
+  # Who was the owner of the Approval Event
   owner: Bytes!
+  # Who was the spender of the Approval Event
   spender: Bytes!
+  # What was the value of the Approval event block
   value: BigInt!
+  # When did the approval event happened
   createdAtTimestamp: BigInt!
+  # The Exchange the approval event belong to
   exchange: Exchange!
 }

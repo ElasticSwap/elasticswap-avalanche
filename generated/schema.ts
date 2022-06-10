@@ -423,8 +423,6 @@ export class Exchange extends Entity {
     this.set("quoteTokenQty", Value.fromBigDecimal(BigDecimal.zero()));
     this.set("createdAtTimestamp", Value.fromBigInt(BigInt.zero()));
     this.set("dailyTxns", Value.fromBigInt(BigInt.zero()));
-    this.set("currentDayData", Value.fromString(""));
-    this.set("currentHourData", Value.fromString(""));
     this.set("hourlyTxns", Value.fromBigInt(BigInt.zero()));
   }
 
@@ -588,40 +586,75 @@ export class Exchange extends Entity {
     this.set("createdAtTimestamp", Value.fromBigInt(value));
   }
 
-  get transfers(): Array<string> {
+  get transfers(): Array<string> | null {
     let value = this.get("transfers");
-    return value!.toStringArray();
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toStringArray();
+    }
   }
 
-  set transfers(value: Array<string>) {
-    this.set("transfers", Value.fromStringArray(value));
+  set transfers(value: Array<string> | null) {
+    if (!value) {
+      this.unset("transfers");
+    } else {
+      this.set("transfers", Value.fromStringArray(<Array<string>>value));
+    }
   }
 
-  get swaps(): Array<string> {
+  get swaps(): Array<string> | null {
     let value = this.get("swaps");
-    return value!.toStringArray();
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toStringArray();
+    }
   }
 
-  set swaps(value: Array<string>) {
-    this.set("swaps", Value.fromStringArray(value));
+  set swaps(value: Array<string> | null) {
+    if (!value) {
+      this.unset("swaps");
+    } else {
+      this.set("swaps", Value.fromStringArray(<Array<string>>value));
+    }
   }
 
-  get liquiditiesEvents(): Array<string> {
+  get liquiditiesEvents(): Array<string> | null {
     let value = this.get("liquiditiesEvents");
-    return value!.toStringArray();
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toStringArray();
+    }
   }
 
-  set liquiditiesEvents(value: Array<string>) {
-    this.set("liquiditiesEvents", Value.fromStringArray(value));
+  set liquiditiesEvents(value: Array<string> | null) {
+    if (!value) {
+      this.unset("liquiditiesEvents");
+    } else {
+      this.set(
+        "liquiditiesEvents",
+        Value.fromStringArray(<Array<string>>value)
+      );
+    }
   }
 
-  get approvals(): Array<string> {
+  get approvals(): Array<string> | null {
     let value = this.get("approvals");
-    return value!.toStringArray();
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toStringArray();
+    }
   }
 
-  set approvals(value: Array<string>) {
-    this.set("approvals", Value.fromStringArray(value));
+  set approvals(value: Array<string> | null) {
+    if (!value) {
+      this.unset("approvals");
+    } else {
+      this.set("approvals", Value.fromStringArray(<Array<string>>value));
+    }
   }
 
   get tokens(): Array<string> {
@@ -633,22 +666,38 @@ export class Exchange extends Entity {
     this.set("tokens", Value.fromStringArray(value));
   }
 
-  get exchangeDayData(): Array<string> {
+  get exchangeDayData(): Array<string> | null {
     let value = this.get("exchangeDayData");
-    return value!.toStringArray();
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toStringArray();
+    }
   }
 
-  set exchangeDayData(value: Array<string>) {
-    this.set("exchangeDayData", Value.fromStringArray(value));
+  set exchangeDayData(value: Array<string> | null) {
+    if (!value) {
+      this.unset("exchangeDayData");
+    } else {
+      this.set("exchangeDayData", Value.fromStringArray(<Array<string>>value));
+    }
   }
 
-  get exchangeHourData(): Array<string> {
+  get exchangeHourData(): Array<string> | null {
     let value = this.get("exchangeHourData");
-    return value!.toStringArray();
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toStringArray();
+    }
   }
 
-  set exchangeHourData(value: Array<string>) {
-    this.set("exchangeHourData", Value.fromStringArray(value));
+  set exchangeHourData(value: Array<string> | null) {
+    if (!value) {
+      this.unset("exchangeHourData");
+    } else {
+      this.set("exchangeHourData", Value.fromStringArray(<Array<string>>value));
+    }
   }
 
   get dailyTxns(): BigInt {
@@ -660,22 +709,38 @@ export class Exchange extends Entity {
     this.set("dailyTxns", Value.fromBigInt(value));
   }
 
-  get currentDayData(): string {
+  get currentDayData(): string | null {
     let value = this.get("currentDayData");
-    return value!.toString();
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
   }
 
-  set currentDayData(value: string) {
-    this.set("currentDayData", Value.fromString(value));
+  set currentDayData(value: string | null) {
+    if (!value) {
+      this.unset("currentDayData");
+    } else {
+      this.set("currentDayData", Value.fromString(<string>value));
+    }
   }
 
-  get currentHourData(): string {
+  get currentHourData(): string | null {
     let value = this.get("currentHourData");
-    return value!.toString();
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
   }
 
-  set currentHourData(value: string) {
-    this.set("currentHourData", Value.fromString(value));
+  set currentHourData(value: string | null) {
+    if (!value) {
+      this.unset("currentHourData");
+    } else {
+      this.set("currentHourData", Value.fromString(<string>value));
+    }
   }
 
   get hourlyTxns(): BigInt {
