@@ -1,4 +1,3 @@
-import { BigInt } from "@graphprotocol/graph-ts";
 import {
   Swap as SwapParams,
   Transfer as TransferParams,
@@ -6,14 +5,7 @@ import {
   Approval as ApprovalParams,
   RemoveLiquidity as RemoveLiquidityParams,
 } from "../generated/ExchangeFactory/Exchange";
-import {
-  Transfer,
-  Swap,
-  LiquidityEvent,
-  Approval,
-  Exchange,
-  ExchangeDayData,
-} from "../generated/schema";
+import { Transfer, Swap, LiquidityEvent, Approval } from "../generated/schema";
 import {
   TransactionType,
   updateExchangeTotalSupplyAndPrice,

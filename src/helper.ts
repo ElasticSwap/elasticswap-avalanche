@@ -1,4 +1,4 @@
-import { Address, BigDecimal, BigInt } from "@graphprotocol/graph-ts";
+import { Address, BigInt } from "@graphprotocol/graph-ts";
 import {
   Exchange,
   ExchangeDayData,
@@ -14,6 +14,13 @@ export enum TransactionType {
   TRANSFER,
 }
 
+/**
+ * Update the total supply and price of an exchange
+ * @param exchangeAddress Address of the exchange contract
+ * @returns void
+ * @description This function Updates the Total Supply and Price on the Exchange entity
+ * @author Harman Kamboj <https://github.com/hammyasf>
+ */
 export function updateExchangeTotalSupplyAndPrice(
   exchangeAddress: Address
 ): void {
@@ -37,6 +44,11 @@ export function updateExchangeTotalSupplyAndPrice(
   exchange!.save();
 }
 
+/**
+ * @param exchangeAddress Address of the exchange contract
+ * @param eventTimestamp Timestamp of the event
+ * @param transactionType Type of the transaction
+ */
 export function updateNumberOfTransactions(
   exchangeAddress: Address,
   eventTimestamp: BigInt,

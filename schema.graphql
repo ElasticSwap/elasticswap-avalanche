@@ -56,13 +56,13 @@ type Exchange @entity {
   baseTokenQty: BigDecimal!
   quoteTokenQty: BigDecimal!
   createdAtTimestamp: BigInt!
-  transfers: [Transfer!]! @derivedFrom(field: "exchange")
-  swaps: [Swap!]! @derivedFrom(field: "exchange")
-  liquiditiesEvents: [LiquidityEvent!]! @derivedFrom(field: "exchange")
-  approvals: [Approval!]! @derivedFrom(field: "exchange")
+  transfers: [Transfer!] @derivedFrom(field: "exchange")
+  swaps: [Swap!] @derivedFrom(field: "exchange")
+  liquiditiesEvents: [LiquidityEvent!] @derivedFrom(field: "exchange")
+  approvals: [Approval!] @derivedFrom(field: "exchange")
   tokens: [Token!]! @derivedFrom(field: "exchange")
-  exchangeDayData: [ExchangeDayData!]! @derivedFrom(field: "exchange")
-  exchangeHourData: [ExchangeHourData!]! @derivedFrom(field: "exchange")
+  exchangeDayData: [ExchangeDayData!] @derivedFrom(field: "exchange")
+  exchangeHourData: [ExchangeHourData!] @derivedFrom(field: "exchange")
   dailyTxns: BigInt!
   currentDayData: ExchangeDayData!
   currentHourData: ExchangeHourData!
