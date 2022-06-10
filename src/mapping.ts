@@ -5,12 +5,17 @@ import { ERC20 } from "../generated/ExchangeFactory/ERC20";
 import { Exchange, Token } from "../generated/schema";
 import { Exchange as ExchangeTemplate } from "../generated/templates";
 
+/**
+ * @dev This function is called when a new exchange is created.
+ * @param event NewExchange event
+ * @returns void
+ * @description This function is called when a new exchange is created
+ * and creates a new Exchange entity in the database
+ * @author Harman Kamboj <https://github.com/hammyasf>
+ */
 export function handleNewExchange(event: NewExchange): void {
-  // Entities can be loaded from the store using a string ID; this ID
-  // needs to be unique across all entities of the same type
-
   let exchange = Exchange.load(event.params.exchangeAddress.toHex());
-  // Entities only exist after they have been saved to the store;
+
   // `null` checks allow to create entities on demand
   if (!exchange) {
     exchange = new Exchange(event.params.exchangeAddress.toHex());
